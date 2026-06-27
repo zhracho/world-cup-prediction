@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World Cup 2026 — Prediction Model</title>
 <style>
-:root{--bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f4ff;--text-sec:#8b9cc4;--text-muted:#4a5578;--accent:#3b82f6;--accent-light:#60a5fa;--gold:#f59e0b;--radius:10px;}
+:root{--bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f4ff;--text-sec:#8b9cc4;--text-muted:#4a5578;--accent:#3b82f6;--accent-light:#60a5fa;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--radius:10px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
 header{text-align:center;padding:3rem 1rem 2rem;position:relative;overflow:hidden;}
@@ -21,8 +21,10 @@ h1 span{color:var(--accent-light);}
 .nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:0 1rem 2rem;}
 .tab{padding:9px 20px;border-radius:20px;border:.5px solid var(--border-strong);background:transparent;color:var(--text-sec);cursor:pointer;font-size:14px;transition:all .15s;}
 .tab:hover{border-color:var(--accent);color:var(--text);}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
-main{max-width:960px;margin:0 auto;padding:0 1rem 4rem;}
+main{max-width:1000px;margin:0 auto;padding:0 1rem 4rem;}
 .section{display:none;}.section.active{display:block;}
+
+/* Groups */
 .groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
 .group-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
 .group-header{background:var(--surface2);padding:8px 14px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-sec);display:flex;justify-content:space-between;}
@@ -34,36 +36,8 @@ main{max-width:960px;margin:0 auto;padding:0 1rem 4rem;}
 .bq{background:rgba(16,185,129,.15);color:#34d399;border:.5px solid rgba(16,185,129,.3);}
 .bt{background:rgba(245,158,11,.15);color:#fbbf24;border:.5px solid rgba(245,158,11,.3);}
 .bo{background:rgba(239,68,68,.1);color:#f87171;border:.5px solid rgba(239,68,68,.2);}
-.prob-table{width:100%;border-collapse:collapse;margin-bottom:2rem;}
-.prob-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);padding:8px 12px;text-align:left;border-bottom:.5px solid var(--border);}
-.prob-table td{padding:8px 12px;border-bottom:.5px solid var(--border);font-size:13px;vertical-align:middle;}
-.prob-table tr.clickable{cursor:pointer;}
-.prob-table tr.clickable:hover td{background:rgba(59,130,246,0.06);}
-.prob-table tr.active-row td{background:rgba(59,130,246,0.1);}
-.rank-num{color:var(--text-muted);font-size:12px;}
-.pct-val{font-weight:700;color:var(--accent-light);min-width:44px;text-align:right;}
-.prob-bar-wrap{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;width:120px;}
-.prob-bar{height:100%;border-radius:3px;}
-.analysis-panel{background:var(--surface);border:.5px solid var(--accent);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;display:none;}
-.analysis-panel.vis{display:block;}
-.analysis-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
-.analysis-flag{font-size:2.2rem;}
-.analysis-team{font-size:1.1rem;font-weight:600;}
-.analysis-win{font-size:2rem;font-weight:700;color:var(--accent-light);margin-left:auto;}
-.analysis-win-lbl{font-size:10px;color:var(--text-muted);text-align:right;margin-top:2px;}
-.analysis-body{font-size:13px;color:var(--text-sec);line-height:1.8;background:var(--surface2);border-radius:var(--radius);padding:.8rem 1rem;}
-.model-info{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:13px;color:var(--text-sec);line-height:1.7;}
-.model-info strong{color:var(--text);}
-.bracket-scroll{overflow-x:auto;padding-bottom:1rem;margin-top:2rem;}
-.bracket-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1rem;}
-.bracket{display:flex;gap:10px;min-width:860px;}
-.round-col{display:flex;flex-direction:column;min-width:128px;}
-.round-title{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;text-align:center;}
-.matchup{background:var(--surface);border:.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;}
-.m-team{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:11px;}
-.m-team.win{background:rgba(16,185,129,.1);}.m-team.lose{opacity:.38;}
-.m-flag{font-size:14px;}.m-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.m-prob{font-size:10px;color:var(--text-muted);}.m-div{height:.5px;background:var(--border);}
+
+/* ELO chart with tooltip */
 .ratings-list{display:flex;flex-direction:column;gap:8px;}
 .r-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:10px 14px;cursor:pointer;transition:border-color .15s;}
 .r-row:hover{border-color:var(--accent-light);}.r-row.sel{border-color:var(--accent);background:rgba(59,130,246,0.06);}
@@ -73,11 +47,91 @@ main{max-width:960px;margin:0 auto;padding:0 1rem 4rem;}
 .r-detail{font-size:11px;color:var(--text-muted);min-width:60px;text-align:right;}
 .r-bar-wrap{width:110px;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
 .r-bar{height:100%;border-radius:3px;}.r-score{font-size:14px;font-weight:600;min-width:36px;text-align:right;}
-.chart-panel{background:var(--surface);border:.5px solid var(--accent);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;display:none;}
+.chart-panel{background:var(--surface);border:.5px solid var(--accent);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;display:none;position:relative;}
 .chart-panel.vis{display:block;}
 .chart-title{font-size:13px;font-weight:600;margin-bottom:12px;}.chart-title span{color:var(--accent-light);}
-.chart-wrap{position:relative;height:160px;}canvas#eloChart{width:100%;height:100%;}
+.chart-wrap{position:relative;height:180px;user-select:none;}
+#eloChart{display:block;}
+.tooltip{position:absolute;background:var(--surface2);border:.5px solid var(--accent);border-radius:6px;padding:6px 10px;font-size:12px;pointer-events:none;display:none;z-index:10;white-space:nowrap;}
+.tooltip strong{color:var(--text);display:block;font-size:13px;}
+.tooltip span{color:var(--text-muted);}
 .chart-hint{font-size:11px;color:var(--text-muted);margin-top:6px;}
+
+/* Predictor */
+.model-info{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:13px;color:var(--text-sec);line-height:1.7;}
+.model-info strong{color:var(--text);}
+.predict-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+@media(max-width:640px){.predict-grid{grid-template-columns:1fr;}}
+.prob-table{width:100%;border-collapse:collapse;}
+.prob-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);padding:6px 10px;text-align:left;border-bottom:.5px solid var(--border);}
+.prob-table td{padding:7px 10px;border-bottom:.5px solid var(--border);font-size:13px;vertical-align:middle;}
+.prob-table tr.clickable{cursor:pointer;}
+.prob-table tr.clickable:hover td{background:rgba(59,130,246,0.05);}
+.prob-table tr.active-row td{background:rgba(59,130,246,0.1);}
+.pct-val{font-weight:700;color:var(--accent-light);text-align:right;min-width:38px;}
+.prob-bar-wrap{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;min-width:60px;}
+.prob-bar{height:100%;border-radius:3px;transition:width .5s ease;}
+
+/* Team card */
+.team-card{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.5rem;display:none;}
+.team-card.vis{display:block;}
+.tc-header{display:flex;align-items:center;gap:14px;margin-bottom:1.2rem;}
+.tc-flag{font-size:3rem;line-height:1;}
+.tc-name{font-size:1.3rem;font-weight:700;}
+.tc-group{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.tc-win{font-size:2.4rem;font-weight:700;color:var(--accent-light);margin-left:auto;text-align:right;}
+.tc-win-lbl{font-size:10px;color:var(--text-muted);}
+.tc-stages{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
+.tc-stage{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.tc-stage-val{font-size:1.1rem;font-weight:700;color:var(--text);}
+.tc-stage-lbl{font-size:10px;color:var(--text-muted);margin-top:2px;}
+.tc-form{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.result-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.result-w{background:rgba(16,185,129,.2);color:#34d399;border:.5px solid rgba(16,185,129,.4);}
+.result-d{background:rgba(245,158,11,.15);color:#fbbf24;border:.5px solid rgba(245,158,11,.3);}
+.result-l{background:rgba(239,68,68,.1);color:#f87171;border:.5px solid rgba(239,68,68,.2);}
+.tc-elo-bar{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.tc-elo-fill{height:100%;border-radius:3px;background:var(--accent);}
+.tc-elo-lbl{font-size:11px;color:var(--text-muted);}
+
+/* Bracket */
+.bracket-section{margin-top:2rem;}
+.bracket-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1rem;}
+.bracket-scroll{overflow-x:auto;padding-bottom:1rem;}
+.bracket{display:flex;gap:8px;min-width:900px;}
+.round-col{display:flex;flex-direction:column;min-width:126px;}
+.round-title{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;text-align:center;}
+.matchup{background:var(--surface);border:.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px;}
+.m-team{display:flex;align-items:center;gap:5px;padding:5px 7px;font-size:11px;}
+.m-team.win{background:rgba(16,185,129,.1);}.m-team.lose{opacity:.35;}
+.m-flag{font-size:13px;}.m-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.m-prob{font-size:10px;color:var(--text-muted);}.m-div{height:.5px;background:var(--border);}
+.champion-box{margin-top:1.5rem;background:var(--surface);border:.5px solid rgba(245,158,11,.4);border-radius:12px;padding:1.5rem;text-align:center;}
+.champion-crown{font-size:2rem;margin-bottom:4px;}
+.champion-flag{font-size:3rem;}
+.champion-name{font-size:1.8rem;font-weight:700;margin-top:4px;}
+.champion-prob{font-size:13px;color:var(--accent-light);margin-top:4px;}
+
+/* H2H tab */
+.h2h-selectors{display:flex;gap:12px;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;}
+.h2h-select{flex:1;min-width:140px;background:var(--surface2);border:.5px solid var(--border-strong);color:var(--text);padding:10px 14px;border-radius:var(--radius);font-size:14px;cursor:pointer;}
+.h2h-vs{font-size:20px;font-weight:700;color:var(--text-muted);}
+.h2h-card{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.5rem;display:none;}
+.h2h-card.vis{display:block;}
+.h2h-teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.h2h-team{text-align:center;}
+.h2h-flag{font-size:3rem;}
+.h2h-name{font-size:14px;font-weight:600;margin-top:6px;}
+.h2h-prob{font-size:2.5rem;font-weight:700;color:var(--accent-light);}
+.h2h-prob-lbl{font-size:11px;color:var(--text-muted);}
+.h2h-bar{height:12px;background:var(--surface2);border-radius:6px;overflow:hidden;margin-bottom:1.2rem;display:flex;}
+.h2h-bar-a{height:100%;background:var(--accent);transition:width .5s;}
+.h2h-bar-b{height:100%;background:#8b5cf6;transition:width .5s;}
+.h2h-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.h2h-stat{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.h2h-stat-val{font-size:1.2rem;font-weight:700;}
+.h2h-stat-lbl{font-size:10px;color:var(--text-muted);margin-top:2px;}
+
 footer{text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:12px;border-top:.5px solid var(--border);}
 </style>
 </head>
@@ -85,66 +139,122 @@ footer{text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:12p
 <header>
   <p class="eyebrow">FIFA World Cup 2026 · USA · Canada · Mexico</p>
   <h1>World Cup <span>Predictor</span></h1>
-  <p class="header-sub">ELO model · 5,000-simulation Monte Carlo · AI team analysis</p>
-  <div><span class="updated-badge">Data updated: <strong id="updatedAt">27 Jun 2026, 19:11 UTC</strong></span></div>
+  <p class="header-sub">ELO model trained on 900+ matches · 5,000-simulation Monte Carlo · head-to-head matchup tool</p>
+  <div><span class="updated-badge">Updated: <strong id="updatedAt">27 Jun 2026, 19:26 UTC</strong></span></div>
 </header>
 <div class="stats-row">
   <div class="stat-card"><div class="stat-val">48</div><div class="stat-lbl">Teams</div></div>
   <div class="stat-card"><div class="stat-val" id="statThrough">—</div><div class="stat-lbl">Through</div></div>
   <div class="stat-card"><div class="stat-val" id="statElim">—</div><div class="stat-lbl">Eliminated</div></div>
-  <div class="stat-card"><div class="stat-val" id="statPlayed">—</div><div class="stat-lbl">Played</div></div>
+  <div class="stat-card"><div class="stat-val" id="statPlayed">—</div><div class="stat-lbl">Matches played</div></div>
 </div>
 <nav class="nav">
-  <button class="tab active" onclick="showTab('groups',this)">Group standings</button>
-  <button class="tab" onclick="showTab('ratings',this)">ELO ratings</button>
+  <button class="tab active" onclick="showTab('groups',this)">Groups</button>
+  <button class="tab" onclick="showTab('ratings',this)">ELO history</button>
   <button class="tab" onclick="showTab('predict',this)">Win predictor</button>
+  <button class="tab" onclick="showTab('h2h',this)">Head to head</button>
 </nav>
 <main>
-  <div id="groups" class="section active"><div class="groups-grid" id="groupsGrid"></div></div>
-  <div id="ratings" class="section">
-    <div class="model-info"><strong>ELO ratings</strong> — trained on every World Cup match since 1930. Click any team to see their historical rating trajectory.</div>
-    <div class="chart-panel" id="chartPanel">
-      <div class="chart-title">ELO history: <span id="chartName">—</span></div>
-      <div class="chart-wrap"><canvas id="eloChart"></canvas></div>
-      <div class="chart-hint" id="chartHint">Click a team below</div>
+
+<!-- GROUPS -->
+<div id="groups" class="section active"><div class="groups-grid" id="groupsGrid"></div></div>
+
+<!-- ELO RATINGS -->
+<div id="ratings" class="section">
+  <div class="model-info"><strong>Historical ELO ratings</strong> — trained on every World Cup match since 1930. More recent matches weighted higher. Click any team to see their rating over time, with tooltips on hover.</div>
+  <div class="chart-panel" id="chartPanel">
+    <div class="chart-title">ELO history: <span id="chartName">—</span></div>
+    <div class="chart-wrap">
+      <canvas id="eloChart"></canvas>
+      <div class="tooltip" id="chartTooltip"><strong id="ttYear">—</strong><span id="ttElo">—</span></div>
     </div>
-    <div class="ratings-list" id="ratingsList"></div>
+    <div class="chart-hint">Hover over data points to see exact ELO · Each point = end of that World Cup</div>
   </div>
-  <div id="predict" class="section">
-    <div class="model-info"><strong>Monte Carlo win predictor</strong> — runs 5,000 simulated tournaments using ELO win probabilities. Click any team to see their stats and win probability breakdown. Everything refreshes automatically every 3 hours.</div>
-    <div class="analysis-panel" id="analysisPanel">
-      <div class="analysis-header">
-        <div class="analysis-flag" id="aFlag"></div>
-        <div><div class="analysis-team" id="aTeam"></div><div style="font-size:12px;color:var(--text-muted)" id="aElo"></div></div>
-        <div style="text-align:right;margin-left:auto"><div class="analysis-win" id="aWin"></div><div class="analysis-win-lbl">win probability</div></div>
+  <div class="ratings-list" id="ratingsList"></div>
+</div>
+
+<!-- WIN PREDICTOR -->
+<div id="predict" class="section">
+  <div class="model-info"><strong>Monte Carlo win predictor</strong> — 5,000 simulated tournaments using ELO win probabilities. Click any team to see full stage-by-stage breakdown. The bracket below shows the most likely path by ELO.</div>
+  <div class="predict-grid">
+    <div>
+      <table class="prob-table">
+        <thead><tr><th>#</th><th>Team</th><th style="text-align:right">Win %</th><th></th></tr></thead>
+        <tbody id="probBody"></tbody>
+      </table>
+    </div>
+    <div class="team-card" id="teamCard">
+      <div class="tc-header">
+        <div class="tc-flag" id="tcFlag"></div>
+        <div><div class="tc-name" id="tcName"></div><div class="tc-group" id="tcGroup"></div></div>
+        <div style="margin-left:auto;text-align:right"><div class="tc-win" id="tcWin"></div><div class="tc-win-lbl">win probability</div></div>
       </div>
-      <div class="analysis-body" id="aBody"></div>
+      <div class="tc-stages" id="tcStages"></div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Group stage form</div>
+      <div class="tc-form" id="tcForm"></div>
+      <div style="margin-top:8px">
+        <div class="tc-elo-bar"><div class="tc-elo-fill" id="tcEloBar"></div></div>
+        <div class="tc-elo-lbl" id="tcEloLbl"></div>
+      </div>
     </div>
-    <table class="prob-table">
-      <thead><tr><th>#</th><th>Team</th><th style="text-align:right">Win %</th><th>Probability</th></tr></thead>
-      <tbody id="probBody"></tbody>
-    </table>
-    <div class="bracket-title">Most likely bracket (by ELO)</div>
-    <div class="bracket-scroll"><div id="bracketEl" class="bracket"></div></div>
   </div>
+  <div class="bracket-section">
+    <div class="bracket-title">Most likely bracket path (by ELO)</div>
+    <div class="bracket-scroll"><div id="bracketEl" class="bracket"></div></div>
+    <div id="championBox"></div>
+  </div>
+</div>
+
+<!-- H2H -->
+<div id="h2h" class="section">
+  <div class="model-info"><strong>Head-to-head matchup tool</strong> — pick any two teams to see win probabilities, ELO comparison, and form breakdown.</div>
+  <div class="h2h-selectors">
+    <select class="h2h-select" id="h2hA" onchange="updateH2H()"></select>
+    <div class="h2h-vs">vs</div>
+    <select class="h2h-select" id="h2hB" onchange="updateH2H()"></select>
+  </div>
+  <div class="h2h-card" id="h2hCard">
+    <div class="h2h-teams">
+      <div class="h2h-team"><div class="h2h-flag" id="h2hFlagA"></div><div class="h2h-name" id="h2hNameA"></div><div class="h2h-prob" id="h2hProbA"></div><div class="h2h-prob-lbl">win chance</div></div>
+      <div style="text-align:center;color:var(--text-muted);font-size:1.4rem;font-weight:300">vs</div>
+      <div class="h2h-team"><div class="h2h-flag" id="h2hFlagB"></div><div class="h2h-name" id="h2hNameB"></div><div class="h2h-prob" id="h2hProbB"></div><div class="h2h-prob-lbl">win chance</div></div>
+    </div>
+    <div class="h2h-bar"><div class="h2h-bar-a" id="h2hBarA"></div><div class="h2h-bar-b" id="h2hBarB"></div></div>
+    <div class="h2h-stats">
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hEloA" style="color:var(--accent-light)"></div><div class="h2h-stat-lbl">ELO A</div></div>
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hEloDiff"></div><div class="h2h-stat-lbl">ELO difference</div></div>
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hEloB" style="color:#8b5cf6"></div><div class="h2h-stat-lbl">ELO B</div></div>
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hFormA"></div><div class="h2h-stat-lbl">Form A (W-D-L)</div></div>
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hGDA"></div><div class="h2h-stat-lbl">GD A</div></div>
+      <div class="h2h-stat"><div class="h2h-stat-val" id="h2hGDB"></div><div class="h2h-stat-lbl">GD B</div></div>
+    </div>
+  </div>
+</div>
+
 </main>
-<footer>ELO trained on WC data 1930–2022 · Monte Carlo 5,000 sims · AI analysis baked in every 3h · Built with Claude</footer>
+<footer>ELO trained on WC data 1930–2022 · Monte Carlo 5,000 sims updated every 3h · Built with Claude</footer>
+
 <script>
-const UPDATED="27 Jun 2026, 19:11 UTC";
+const UPDATED="27 Jun 2026, 19:26 UTC";
 const GROUPS_DATA=[{"group":"A","teams":[{"name":"Mexico","pts":9,"w":3,"d":0,"l":0,"gf":7,"ga":1,"gd":6,"played":3},{"name":"South Africa","pts":4,"w":1,"d":1,"l":1,"gf":3,"ga":3,"gd":0,"played":3},{"name":"Korea Republic","pts":3,"w":1,"d":0,"l":2,"gf":3,"ga":5,"gd":-2,"played":3},{"name":"Czechia","pts":1,"w":0,"d":1,"l":2,"gf":2,"ga":6,"gd":-4,"played":3}]},{"group":"B","teams":[{"name":"Switzerland","pts":7,"w":2,"d":1,"l":0,"gf":5,"ga":2,"gd":3,"played":3},{"name":"Canada","pts":4,"w":1,"d":1,"l":1,"gf":4,"ga":3,"gd":1,"played":3},{"name":"Bosnia and Herzegovina","pts":4,"w":1,"d":1,"l":1,"gf":3,"ga":3,"gd":0,"played":3},{"name":"Qatar","pts":1,"w":0,"d":1,"l":2,"gf":1,"ga":5,"gd":-4,"played":3}]},{"group":"C","teams":[{"name":"Brazil","pts":7,"w":2,"d":1,"l":0,"gf":6,"ga":2,"gd":4,"played":3},{"name":"Morocco","pts":7,"w":2,"d":1,"l":0,"gf":5,"ga":1,"gd":4,"played":3},{"name":"Scotland","pts":3,"w":1,"d":0,"l":2,"gf":2,"ga":5,"gd":-3,"played":3},{"name":"Haiti","pts":0,"w":0,"d":0,"l":3,"gf":0,"ga":5,"gd":-5,"played":3}]},{"group":"D","teams":[{"name":"USA","pts":6,"w":2,"d":0,"l":1,"gf":8,"ga":7,"gd":1,"played":3},{"name":"T\u00fcrkiye","pts":6,"w":2,"d":0,"l":1,"gf":6,"ga":7,"gd":-1,"played":3},{"name":"Australia","pts":5,"w":1,"d":2,"l":0,"gf":3,"ga":3,"gd":0,"played":3},{"name":"Paraguay","pts":5,"w":1,"d":2,"l":0,"gf":3,"ga":3,"gd":0,"played":3}]},{"group":"E","teams":[{"name":"Germany","pts":6,"w":2,"d":0,"l":1,"gf":5,"ga":4,"gd":1,"played":3},{"name":"Ivory Coast","pts":6,"w":2,"d":0,"l":1,"gf":5,"ga":4,"gd":1,"played":3},{"name":"Ecuador","pts":4,"w":1,"d":1,"l":1,"gf":4,"ga":3,"gd":1,"played":3},{"name":"Cura\u00e7ao","pts":1,"w":0,"d":1,"l":2,"gf":1,"ga":5,"gd":-4,"played":3}]},{"group":"F","teams":[{"name":"Netherlands","pts":10,"w":3,"d":1,"l":0,"gf":9,"ga":3,"gd":6,"played":4},{"name":"Japan","pts":6,"w":1,"d":3,"l":0,"gf":4,"ga":3,"gd":1,"played":4},{"name":"Sweden","pts":5,"w":1,"d":2,"l":1,"gf":4,"ga":4,"gd":0,"played":4},{"name":"Tunisia","pts":0,"w":0,"d":0,"l":3,"gf":1,"ga":8,"gd":-7,"played":3}]},{"group":"G","teams":[{"name":"Belgium","pts":5,"w":1,"d":2,"l":0,"gf":7,"ga":3,"gd":4,"played":3},{"name":"Egypt","pts":5,"w":1,"d":2,"l":0,"gf":3,"ga":2,"gd":1,"played":3},{"name":"IR Iran","pts":3,"w":0,"d":3,"l":0,"gf":3,"ga":3,"gd":0,"played":3},{"name":"New Zealand","pts":1,"w":0,"d":1,"l":2,"gf":2,"ga":7,"gd":-5,"played":3}]},{"group":"H","teams":[{"name":"Spain","pts":7,"w":2,"d":1,"l":0,"gf":4,"ga":1,"gd":3,"played":3},{"name":"Cape Verde","pts":3,"w":0,"d":3,"l":0,"gf":2,"ga":2,"gd":0,"played":3},{"name":"Uruguay","pts":2,"w":0,"d":2,"l":1,"gf":2,"ga":3,"gd":-1,"played":3},{"name":"Saudi Arabia","pts":2,"w":0,"d":2,"l":1,"gf":1,"ga":3,"gd":-2,"played":3}]},{"group":"I","teams":[{"name":"France","pts":9,"w":3,"d":0,"l":0,"gf":9,"ga":2,"gd":7,"played":3},{"name":"Norway","pts":6,"w":2,"d":0,"l":1,"gf":6,"ga":5,"gd":1,"played":3},{"name":"Senegal","pts":3,"w":1,"d":0,"l":2,"gf":5,"ga":8,"gd":-3,"played":3},{"name":"Iraq","pts":0,"w":0,"d":0,"l":3,"gf":0,"ga":9,"gd":-9,"played":3}]},{"group":"J","teams":[{"name":"Argentina","pts":6,"w":2,"d":0,"l":0,"gf":6,"ga":1,"gd":5,"played":2},{"name":"Austria","pts":3,"w":1,"d":0,"l":1,"gf":2,"ga":3,"gd":-1,"played":2},{"name":"Algeria","pts":3,"w":1,"d":0,"l":1,"gf":2,"ga":3,"gd":-1,"played":2},{"name":"Jordan","pts":0,"w":0,"d":0,"l":2,"gf":0,"ga":3,"gd":-3,"played":2}]},{"group":"K","teams":[{"name":"Colombia","pts":6,"w":2,"d":0,"l":0,"gf":5,"ga":1,"gd":4,"played":2},{"name":"Portugal","pts":4,"w":1,"d":1,"l":0,"gf":4,"ga":2,"gd":2,"played":2},{"name":"Congo DR","pts":1,"w":0,"d":1,"l":1,"gf":1,"ga":3,"gd":-2,"played":2},{"name":"Uzbekistan","pts":0,"w":0,"d":0,"l":2,"gf":0,"ga":4,"gd":-4,"played":2}]},{"group":"L","teams":[{"name":"England","pts":4,"w":1,"d":1,"l":0,"gf":3,"ga":1,"gd":2,"played":2},{"name":"Ghana","pts":4,"w":1,"d":1,"l":0,"gf":3,"ga":1,"gd":2,"played":2},{"name":"Croatia","pts":3,"w":1,"d":0,"l":1,"gf":2,"ga":2,"gd":0,"played":2},{"name":"Panama","pts":0,"w":0,"d":0,"l":2,"gf":0,"ga":4,"gd":-4,"played":2}]}];
 const HISTORICAL_ELO={"Uruguay": 1412.3, "Peru": 1469.6, "Chile": 1532.7, "France": 1768.4, "Argentina": 1623.1, "Mexico": 1365.4, "Romania": 1533.2, "Brazil": 1577.1, "Bolivia": 1469.4, "Croatia": 1495.1, "USA": 1453.8, "Italy": 1747.2, "Germany": 1714.4, "Belgium": 1504.0, "Austria": 1481.1, "Spain": 1567.0, "Sweden": 1489.7, "Hungary": 1480.1, "Czech Republic": 1478.2, "Cuba": 1489.6, "Indonesia": 1482.2, "Switzerland": 1403.0, "Turkey": 1519.1, "Korea Republic": 1370.1, "Scotland": 1499.9, "England": 1551.6, "Paraguay": 1405.5, "Wales": 1479.9, "Russia": 1438.8, "Northern Ireland": 1477.5, "Portugal": 1526.1, "Bulgaria": 1478.5, "Korea DPR": 1483.0, "Israel": 1487.2, "Morocco": 1492.8, "Zaire": 1469.2, "Netherlands": 1650.5, "Poland": 1528.1, "Tunisia": 1475.2, "Algeria": 1502.3, "Honduras": 1488.9, "Cameroon": 1475.5, "Ireland": 1500.9, "Colombia": 1496.4, "Nigeria": 1504.9, "South Africa": 1476.5, "Japan": 1485.0, "Senegal": 1479.9, "Saudi Arabia": 1466.7, "Costa Rica": 1499.1, "Serbia": 1465.4, "Côte d'Ivoire": 1484.9, "Ecuador": 1504.7, "Ukraine": 1482.8, "Australia": 1467.1, "Denmark": 1476.5, "Ghana": 1496.4, "Slovakia": 1477.5, "Greece": 1478.3, "Bosnia and Herzegovina": 1485.1, "Egypt": 1479.6, "Iceland": 1502.5, "Qatar": 1479.6, "Iran": 1501.0, "Canada": 1460.0, "Türkiye": 1517.4, "IR Iran": 1500.9, "Ivory Coast": 1485.0, "Congo DR": 1390.0, "Uzbekistan": 1360.0, "Curaçao": 1350.0, "Haiti": 1340.0, "New Zealand": 1380.0, "Cape Verde": 1390.0, "Jordan": 1380.0, "Panama": 1380.0, "Iraq": 1390.0, "Norway": 1470.0};
 const COMBO_MAP={"EFGHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3F", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "DFGHIJKL": {"A": "3H", "B": "3G", "D": "3I", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "DEGHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3D", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "DEFHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "DEFGIJKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "DEFGHJKL": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "DEFGHIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "DEFGHIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "DEFGHIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "CFGHIJKL": {"A": "3H", "B": "3G", "D": "3I", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "CEGHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3C", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "CEFHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CEFGIJKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "CEFGHJKL": {"A": "3E", "B": "3G", "D": "3J", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CEFGHIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CEFGHIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "CEFGHIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3C", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "CDGHIJKL": {"A": "3H", "B": "3G", "D": "3I", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3K"}, "CDFHIJKL": {"A": "3C", "B": "3J", "D": "3I", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDFGIJKL": {"A": "3C", "B": "3G", "D": "3I", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "CDFGHJKL": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDFGHIKL": {"A": "3C", "B": "3G", "D": "3I", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDFGHIJL": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "CDFGHIJK": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "CDEHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3K"}, "CDEGIJKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3K"}, "CDEGHIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3K"}, "CDEGHIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3I"}, "CDEGHIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3C", "G": "3H", "I": "3D", "K": "3I", "L": "3K"}, "CDEFIJKL": {"A": "3C", "B": "3J", "D": "3E", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "CDEFHJKL": {"A": "3C", "B": "3J", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDEFHIKL": {"A": "3C", "B": "3E", "D": "3I", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDEFHIJL": {"A": "3C", "B": "3J", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "CDEFHIJK": {"A": "3C", "B": "3J", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "CDEFGJKL": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "CDEFGIKL": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "CDEFGIJL": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "CDEFGIJK": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "CDEFGHKL": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "CDEFGHJL": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3E"}, "CDEFGHJK": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3K"}, "CDEFGHIL": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "CDEFGHIK": {"A": "3C", "B": "3G", "D": "3E", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "CDEFGHIJ": {"A": "3C", "B": "3G", "D": "3J", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3I"}, "BFGHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3F", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BEGHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3B", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "BEFHIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3F", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BEFGIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3F", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BEFGHJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3F", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "BEFGHIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3F", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BEFGHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3F", "G": "3H", "I": "3G", "K": "3L", "L": "3I"}, "BEFGHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3F", "G": "3H", "I": "3G", "K": "3I", "L": "3K"}, "BDGHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BDFHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BDFGIJKL": {"A": "3I", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BDFGHJKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BDFGHIKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BDFGHIJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "BDFGHIJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "BDEHIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BDEGIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BDEGHIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BDEGHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3G", "K": "3L", "L": "3I"}, "BDEGHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3G", "K": "3I", "L": "3K"}, "BDEFIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BDEFHJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BDEFHIKL": {"A": "3E", "B": "3I", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BDEFHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BDEFHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BDEFGJKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BDEFGIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BDEFGIJL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "BDEFGIJK": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "BDEFGHKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BDEFGHJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3E"}, "BDEFGHJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3E", "L": "3K"}, "BDEFGHIL": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BDEFGHIK": {"A": "3E", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BDEFGHIJ": {"A": "3H", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3E", "L": "3I"}, "BCGHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BCFHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCFGIJKL": {"A": "3I", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BCFGHJKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BCFGHIKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCFGHIJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "BCFGHIJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "BCEHIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BCEGIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3G", "K": "3L", "L": "3K"}, "BCEGHIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3I", "I": "3H", "K": "3L", "L": "3K"}, "BCEGHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3G", "K": "3L", "L": "3I"}, "BCEGHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3G", "K": "3I", "L": "3K"}, "BCEFIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCEFHJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCEFHIKL": {"A": "3E", "B": "3I", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCEFHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BCEFHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BCEFGJKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BCEFGIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCEFGIJL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "BCEFGIJK": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "BCEFGHKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCEFGHJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3L", "L": "3E"}, "BCEFGHJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3E", "L": "3K"}, "BCEFGHIL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BCEFGHIK": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BCEFGHIJ": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3E", "L": "3I"}, "BCDHIJKL": {"A": "3H", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3D", "K": "3L", "L": "3K"}, "BCDGIJKL": {"A": "3I", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3K"}, "BCDGHJKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3K"}, "BCDGHIKL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3I", "I": "3D", "K": "3L", "L": "3K"}, "BCDGHIJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3I"}, "BCDGHIJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3I", "L": "3K"}, "BCDFIJKL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCDFHJKL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCDFHIKL": {"A": "3C", "B": "3I", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCDFHIJL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BCDFHIJK": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BCDFGJKL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3K"}, "BCDFGIKL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3I", "I": "3F", "K": "3L", "L": "3K"}, "BCDFGIJL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3I"}, "BCDFGIJK": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3I", "L": "3K"}, "BCDFGHKL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCDFGHJL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3J"}, "BCDFGHJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3D", "L": "3K"}, "BCDFGHIL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BCDFGHIK": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BCDFGHIJ": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3D", "L": "3I"}, "BCDEIJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3I", "I": "3D", "K": "3L", "L": "3K"}, "BCDEHJKL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3K"}, "BCDEHIKL": {"A": "3E", "B": "3I", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3K"}, "BCDEHIJL": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3I"}, "BCDEHIJK": {"A": "3E", "B": "3J", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3I", "L": "3K"}, "BCDEGIKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3I", "I": "3D", "K": "3L", "L": "3K"}, "BCDEGIJL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3I"}, "BCDEGIJK": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3I", "L": "3K"}, "BCDEGHKL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3K"}, "BCDEGHJL": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3L", "L": "3E"}, "BCDEGHJK": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3E", "L": "3K"}, "BCDEGHIL": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3L", "L": "3I"}, "BCDEGHIK": {"A": "3E", "B": "3G", "D": "3B", "E": "3C", "G": "3H", "I": "3D", "K": "3I", "L": "3K"}, "BCDEGHIJ": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3D", "K": "3E", "L": "3I"}, "BCDEFJKL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3L", "L": "3K"}, "BCDEFHKL": {"A": "3C", "B": "3E", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3K"}, "BCDEFIJL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3L", "L": "3I"}, "BCDEFIJK": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3I", "L": "3K"}, "BCDEFHJL": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3E"}, "BCDEFHJK": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3K"}, "BCDEFHIL": {"A": "3C", "B": "3E", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3I"}, "BCDEFHIK": {"A": "3C", "B": "3E", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3I", "L": "3K"}, "BCDEFHIJ": {"A": "3C", "B": "3J", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3I"}, "BCDEFGKL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3L", "L": "3K"}, "BCDEFGJL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3L", "L": "3E"}, "BCDEFGJK": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3E", "L": "3K"}, "BCDEFGIL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3L", "L": "3I"}, "BCDEFGIK": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3E", "I": "3F", "K": "3I", "L": "3K"}, "BCDEFGIJ": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3J", "I": "3F", "K": "3E", "L": "3I"}, "BCDEFGHL": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3L", "L": "3E"}, "BCDEFGHK": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3K"}, "BCDEFGHJ": {"A": "3H", "B": "3G", "D": "3B", "E": "3C", "G": "3J", "I": "3F", "K": "3D", "L": "3E"}, "BCDEFGHI": {"A": "3C", "B": "3G", "D": "3B", "E": "3D", "G": "3H", "I": "3F", "K": "3E", "L": "3I"}, "AFGHIJKL": {"A": "3H", "B": "3J", "D": "3I", "E": "3F", "G": "3A", "I": "3G", "K": "3L", "L": "3K"}, "AEGHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3A", "G": "3H", "I": "3G", "K": "3L", "L": "3K"}, "AEFHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3F", "G": "3A", "I": "3H", "K": "3L", "L": "3K"}, "AEFGIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3F", "G": "3A", "I": "3G", "K": "3L", "L": "3K"}, "AEFGHJKL": {"A": "3E", "B": "3G", "D": "3J", "E": "3F", "G": "3A", "I": "3H", "K": "3L", "L": "3K"}, "AEFGHIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3F", "G": "3A", "I": "3H", "K": "3L", "L": "3K"}, "AEFGHIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3F", "G": "3A", "I": "3H", "K": "3L", "L": "3I"}, "AEFGHIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3F", "G": "3A", "I": "3H", "K": "3I", "L": "3K"}, "ADGHIJKL": {"A": "3H", "B": "3J", "D": "3I", "E": "3D", "G": "3A", "I": "3G", "K": "3L", "L": "3K"}, "ADFHIJKL": {"A": "3H", "B": "3J", "D": "3I", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADFGIJKL": {"A": "3I", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADFGHJKL": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADFGHIKL": {"A": "3H", "B": "3G", "D": "3I", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADFGHIJL": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3I"}, "ADFGHIJK": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3I", "L": "3K"}, "ADEHIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3D", "G": "3A", "I": "3H", "K": "3L", "L": "3K"}, "ADEGIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3D", "G": "3A", "I": "3G", "K": "3L", "L": "3K"}, "ADEGHIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3D", "G": "3A", "I": "3H", "K": "3L", "L": "3K"}, "ADEGHIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3H", "K": "3L", "L": "3I"}, "ADEGHIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3H", "K": "3I", "L": "3K"}, "ADEFIJKL": {"A": "3E", "B": "3J", "D": "3I", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFHJKL": {"A": "3H", "B": "3J", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFHIKL": {"A": "3H", "B": "3E", "D": "3I", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFHIJL": {"A": "3H", "B": "3J", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3I"}, "ADEFHIJK": {"A": "3H", "B": "3J", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3I", "L": "3K"}, "ADEFGJKL": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFGIKL": {"A": "3E", "B": "3G", "D": "3I", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFGIJL": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3I"}, "ADEFGIJK": {"A": "3E", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3I", "L": "3K"}, "ADEFGHKL": {"A": "3H", "B": "3G", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3K"}, "ADEFGHJL": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3E"}, "ADEFGHJK": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3E", "L": "3K"}, "ADEFGHIL": {"A": "3H", "B": "3G", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3L", "L": "3I"}, "ADEFGHIK": {"A": "3H", "B": "3G", "D": "3E", "E": "3D", "G": "3A", "I": "3F", "K": "3I", "L": "3K"}, "ADEFGHIJ": {"A": "3H", "B": "3G", "D": "3J", "E": "3D", "G": "3A", "I": "3F", "K": "3E", "L": "3I"}};
 const ELO_HISTORY={"Uruguay": [[1930, 1563.1], [1934, 1563.1], [1938, 1563.1], [1950, 1602.1], [1954, 1564.0], [1958, 1564.0], [1962, 1547.6], [1966, 1524.3], [1970, 1509.5], [1974, 1494.9], [1978, 1494.9], [1982, 1494.9], [1986, 1494.9], [1990, 1482.5], [1994, 1482.5], [1998, 1482.5], [2002, 1482.5], [2006, 1482.5], [2010, 1460.5], [2014, 1435.3], [2018, 1427.1], [2022, 1412.3]], "Peru": [[1930, 1491.2], [1934, 1491.2], [1938, 1491.2], [1950, 1491.2], [1954, 1491.2], [1958, 1491.2], [1962, 1491.2], [1966, 1491.2], [1970, 1469.6], [1974, 1469.6], [1978, 1469.6], [1982, 1469.6], [1986, 1469.6], [1990, 1469.6], [1994, 1469.6], [1998, 1469.6], [2002, 1469.6], [2006, 1469.6], [2010, 1469.6], [2014, 1469.6], [2018, 1469.6], [2022, 1469.6]], "Chile": [[1930, 1518.9], [1934, 1518.9], [1938, 1518.9], [1950, 1518.9], [1954, 1518.9], [1958, 1518.9], [1962, 1557.2], [1966, 1544.5], [1970, 1544.5], [1974, 1532.8], [1978, 1532.8], [1982, 1532.8], [1986, 1532.8], [1990, 1532.8], [1994, 1532.8], [1998, 1524.6], [2002, 1524.6], [2006, 1524.6], [2010, 1524.6], [2014, 1532.7], [2018, 1532.7], [2022, 1532.7]], "France": [[1930, 1482.6], [1934, 1469.5], [1938, 1459.1], [1950, 1459.1], [1954, 1459.1], [1958, 1498.8], [1962, 1498.8], [1966, 1498.8], [1970, 1498.8], [1974, 1498.8], [1978, 1474.9], [1982, 1458.5], [1986, 1483.6], [1990, 1483.6], [1994, 1483.6], [1998, 1625.7], [2002, 1604.6], [2006, 1677.1], [2010, 1677.1], [2014, 1654.6], [2018, 1723.4], [2022, 1768.4]], "Argentina": [[1930, 1514.2], [1934, 1514.2], [1938, 1514.2], [1950, 1514.2], [1954, 1514.2], [1958, 1505.1], [1962, 1491.5], [1966, 1486.8], [1970, 1486.8], [1974, 1472.6], [1978, 1543.1], [1982, 1506.1], [1986, 1603.9], [1990, 1567.1], [1994, 1524.5], [1998, 1507.2], [2002, 1492.7], [2006, 1537.5], [2010, 1540.0], [2014, 1554.9], [2018, 1552.5], [2022, 1623.1]], "Mexico": [[1930, 1480.0], [1934, 1480.0], [1938, 1480.0], [1950, 1456.4], [1954, 1456.4], [1958, 1443.4], [1962, 1435.3], [1966, 1424.0], [1970, 1411.8], [1974, 1411.8], [1978, 1400.8], [1982, 1400.8], [1986, 1423.3], [1990, 1423.3], [1994, 1423.3], [1998, 1409.8], [2002, 1387.5], [2006, 1371.7], [2010, 1362.0], [2014, 1351.5], [2018, 1369.6], [2022, 1365.4]], "Romania": [[1930, 1489.9], [1934, 1489.9], [1938, 1475.9], [1950, 1475.9], [1954, 1475.9], [1958, 1475.9], [1962, 1475.9], [1966, 1475.9], [1970, 1480.6], [1974, 1480.6], [1978, 1480.6], [1982, 1480.6], [1986, 1480.6], [1990, 1494.7], [1994, 1533.2], [1998, 1533.2], [2002, 1533.2], [2006, 1533.2], [2010, 1533.2], [2014, 1533.2], [2018, 1533.2], [2022, 1533.2]], "Brazil": [[1930, 1501.3], [1934, 1486.3], [1938, 1493.3], [1950, 1506.1], [1954, 1490.2], [1958, 1581.6], [1962, 1654.2], [1966, 1643.3], [1970, 1720.1], [1974, 1643.9], [1978, 1658.4], [1982, 1648.8], [1986, 1647.4], [1990, 1630.1], [1994, 1692.4], [1998, 1639.0], [2002, 1724.6], [2006, 1687.1], [2010, 1642.1], [2014, 1588.7], [2018, 1544.1], [2022, 1577.1]], "Bolivia": [[1930, 1489.6], [1934, 1489.6], [1938, 1489.6], [1950, 1479.6], [1954, 1479.6], [1958, 1479.6], [1962, 1479.6], [1966, 1479.6], [1970, 1479.6], [1974, 1479.6], [1978, 1479.6], [1982, 1479.6], [1986, 1479.6], [1990, 1479.6], [1994, 1469.4], [1998, 1469.4], [2002, 1469.4], [2006, 1469.4], [2010, 1469.4], [2014, 1469.4], [2018, 1469.4], [2022, 1469.4]], "Croatia": [[1930, 1488.9], [1934, 1488.9], [1938, 1488.9], [1950, 1500.6], [1954, 1484.8], [1958, 1484.7], [1962, 1462.1], [1966, 1462.1], [1970, 1462.1], [1974, 1475.2], [1978, 1475.2], [1982, 1475.2], [1986, 1475.2], [1990, 1467.9], [1994, 1467.9], [1998, 1484.1], [2002, 1484.1], [2006, 1477.7], [2010, 1477.7], [2014, 1467.4], [2018, 1446.4], [2022, 1495.1]], "USA": [[1930, 1480.3], [1934, 1464.9], [1938, 1464.9], [1950, 1464.9], [1954, 1464.9], [1958, 1464.9], [1962, 1464.9], [1966, 1464.9], [1970, 1464.9], [1974, 1464.9], [1978, 1464.9], [1982, 1464.9], [1986, 1464.9], [1990, 1464.9], [1994, 1467.8], [1998, 1455.6], [2002, 1460.1], [2006, 1460.1], [2010, 1463.9], [2014, 1463.9], [2018, 1463.9], [2022, 1453.8]], "Italy": [[1934, 1555.2], [1938, 1619.9], [1950, 1604.7], [1954, 1589.4], [1958, 1589.4], [1962, 1574.3], [1966, 1555.8], [1970, 1578.6], [1974, 1578.6], [1978, 1575.0], [1982, 1673.5], [1986, 1668.1], [1990, 1700.7], [1994, 1735.3], [1998, 1713.3], [2002, 1713.3], [2006, 1747.2], [2010, 1747.2], [2014, 1747.2], [2018, 1747.2], [2022, 1747.2]], "Germany": [[1934, 1546.8], [1938, 1546.8], [1950, 1546.8], [1954, 1612.3], [1958, 1562.1], [1962, 1540.5], [1966, 1553.9], [1970, 1591.1], [1974, 1569.2], [1978, 1569.1], [1982, 1520.9], [1986, 1510.8], [1990, 1592.9], [1994, 1564.1], [1998, 1589.7], [2002, 1615.3], [2006, 1640.0], [2010, 1667.8], [2014, 1781.8], [2018, 1750.0], [2022, 1714.4]], "Belgium": [[1934, 1483.7], [1938, 1466.9], [1950, 1466.9], [1954, 1467.9], [1958, 1467.9], [1962, 1467.9], [1966, 1467.9], [1970, 1467.9], [1974, 1467.9], [1978, 1467.9], [1982, 1469.6], [1986, 1402.5], [1990, 1402.5], [1994, 1402.5], [1998, 1402.5], [2002, 1405.9], [2006, 1405.9], [2010, 1405.9], [2014, 1385.8], [2018, 1508.2], [2022, 1504.0]], "Austria": [[1934, 1494.2], [1938, 1494.2], [1950, 1494.2], [1954, 1531.4], [1958, 1516.3], [1962, 1516.3], [1966, 1516.3], [1970, 1516.3], [1974, 1516.3], [1978, 1504.1], [1982, 1488.7], [1986, 1488.7], [1990, 1481.1], [1994, 1481.1], [1998, 1481.1], [2002, 1481.1], [2006, 1481.1], [2010, 1481.1], [2014, 1481.1], [2018, 1481.1], [2022, 1481.1]], "Spain": [[1934, 1515.1], [1938, 1515.1], [1950, 1504.2], [1954, 1504.2], [1958, 1504.2], [1962, 1495.1], [1966, 1482.7], [1970, 1482.7], [1974, 1482.7], [1978, 1482.7], [1982, 1483.4], [1986, 1474.2], [1990, 1474.2], [1994, 1484.5], [1998, 1470.1], [2002, 1467.4], [2006, 1467.4], [2010, 1597.3], [2014, 1576.0], [2018, 1573.2], [2022, 1567.0]], "Sweden": [[1934, 1486.9], [1938, 1463.2], [1950, 1470.6], [1954, 1470.6], [1958, 1514.7], [1962, 1514.7], [1966, 1514.7], [1970, 1503.6], [1974, 1503.2], [1978, 1507.9], [1982, 1507.9], [1986, 1507.9], [1990, 1498.9], [1994, 1523.9], [1998, 1523.9], [2002, 1523.9], [2006, 1505.2], [2010, 1505.2], [2014, 1505.2], [2018, 1489.7], [2022, 1489.7]], "Hungary": [[1934, 1482.3], [1938, 1524.4], [1950, 1524.4], [1954, 1565.8], [1958, 1549.8], [1962, 1528.2], [1966, 1494.3], [1970, 1494.3], [1974, 1494.3], [1978, 1480.1], [1982, 1480.1], [1986, 1480.1], [1990, 1480.1], [1994, 1480.1], [1998, 1480.1], [2002, 1480.1], [2006, 1480.1], [2010, 1480.1], [2014, 1480.1], [2018, 1480.1], [2022, 1480.1]], "Czech Republic": [[1934, 1479.3], [1938, 1479.6], [1950, 1479.6], [1954, 1471.6], [1958, 1471.6], [1962, 1500.9], [1966, 1500.9], [1970, 1478.2], [1974, 1478.2], [1978, 1478.2], [1982, 1478.2], [1986, 1478.2], [1990, 1478.2], [1994, 1478.2], [1998, 1478.2], [2002, 1478.2], [2006, 1478.2], [2010, 1478.2], [2014, 1478.2], [2018, 1478.2], [2022, 1478.2]], "Cuba": [[1938, 1489.6], [1950, 1489.6], [1954, 1489.6], [1958, 1489.6], [1962, 1489.6], [1966, 1489.6], [1970, 1489.6], [1974, 1489.6], [1978, 1489.6], [1982, 1489.6], [1986, 1489.6], [1990, 1489.6], [1994, 1489.6], [1998, 1489.6], [2002, 1489.6], [2006, 1489.6], [2010, 1489.6], [2014, 1489.6], [2018, 1489.6], [2022, 1489.6]], "Indonesia": [[1938, 1482.2], [1950, 1482.2], [1954, 1482.2], [1958, 1482.2], [1962, 1482.2], [1966, 1482.2], [1970, 1482.2], [1974, 1482.2], [1978, 1482.2], [1982, 1482.2], [1986, 1482.2], [1990, 1482.2], [1994, 1482.2], [1998, 1482.2], [2002, 1482.2], [2006, 1482.2], [2010, 1482.2], [2014, 1482.2], [2018, 1482.2], [2022, 1482.2]], "Switzerland": [[1938, 1479.1], [1950, 1467.9], [1954, 1466.3], [1958, 1466.3], [1962, 1455.3], [1966, 1444.3], [1970, 1444.3], [1974, 1444.3], [1978, 1444.3], [1982, 1444.3], [1986, 1444.3], [1990, 1444.3], [1994, 1420.1], [1998, 1420.1], [2002, 1420.1], [2006, 1427.2], [2010, 1427.2], [2014, 1427.2], [2018, 1413.4], [2022, 1403.0]], "Turkey": [[1954, 1501.7], [1958, 1501.7], [1962, 1501.7], [1966, 1501.7], [1970, 1501.7], [1974, 1501.7], [1978, 1501.7], [1982, 1501.7], [1986, 1501.7], [1990, 1501.7], [1994, 1501.7], [1998, 1501.7], [2002, 1519.1], [2006, 1519.1], [2010, 1519.1], [2014, 1519.1], [2018, 1519.1], [2022, 1519.1]], "Korea Republic": [[1954, 1474.7], [1958, 1474.7], [1962, 1474.7], [1966, 1474.7], [1970, 1474.7], [1974, 1474.7], [1978, 1474.7], [1982, 1474.7], [1986, 1460.7], [1990, 1460.7], [1994, 1461.2], [1998, 1461.2], [2002, 1418.3], [2006, 1418.3], [2010, 1398.2], [2014, 1398.2], [2018, 1398.2], [2022, 1370.1]], "Scotland": [[1954, 1486.7], [1958, 1486.6], [1962, 1486.6], [1966, 1486.6], [1970, 1486.6], [1974, 1507.8], [1978, 1507.8], [1982, 1507.8], [1986, 1507.8], [1990, 1507.8], [1994, 1507.8], [1998, 1499.9], [2002, 1499.9], [2006, 1499.9], [2010, 1499.9], [2014, 1499.9], [2018, 1499.9], [2022, 1499.9]], "England": [[1954, 1486.5], [1958, 1487.5], [1962, 1486.8], [1966, 1583.3], [1970, 1562.4], [1974, 1562.4], [1978, 1562.4], [1982, 1573.0], [1986, 1534.5], [1990, 1535.0], [1994, 1535.0], [1998, 1535.2], [2002, 1512.7], [2006, 1551.2], [2010, 1526.7], [2014, 1526.7], [2018, 1526.1], [2022, 1551.6]], "Paraguay": [[1958, 1484.8], [1962, 1484.8], [1966, 1484.8], [1970, 1484.8], [1974, 1484.8], [1978, 1484.8], [1982, 1484.8], [1986, 1484.8], [1990, 1484.8], [1994, 1484.8], [1998, 1463.1], [2002, 1448.6], [2006, 1435.4], [2010, 1405.5], [2014, 1405.5], [2018, 1405.5], [2022, 1405.5]], "Wales": [[1958, 1502.0], [1962, 1502.0], [1966, 1502.0], [1970, 1502.0], [1974, 1502.0], [1978, 1502.0], [1982, 1502.0], [1986, 1502.0], [1990, 1502.0], [1994, 1502.0], [1998, 1502.0], [2002, 1502.0], [2006, 1502.0], [2010, 1502.0], [2014, 1502.0], [2018, 1502.0], [2022, 1479.9]], "Russia": [[1958, 1463.2], [1962, 1462.6], [1966, 1469.5], [1970, 1454.8], [1974, 1454.8], [1978, 1454.8], [1982, 1448.3], [1986, 1433.3], [1990, 1419.6], [1994, 1412.1], [1998, 1412.1], [2002, 1412.1], [2006, 1412.1], [2010, 1412.1], [2014, 1412.1], [2018, 1438.8], [2022, 1438.8]], "Northern Ireland": [[1958, 1477.5], [1962, 1477.5], [1966, 1477.5], [1970, 1477.5], [1974, 1477.5], [1978, 1477.5], [1982, 1477.5], [1986, 1477.5], [1990, 1477.5], [1994, 1477.5], [1998, 1477.5], [2002, 1477.5], [2006, 1477.5], [2010, 1477.5], [2014, 1477.5], [2018, 1477.5], [2022, 1477.5]], "Portugal": [[1966, 1546.7], [1970, 1546.7], [1974, 1546.7], [1978, 1546.7], [1982, 1546.7], [1986, 1562.0], [1990, 1562.0], [1994, 1562.0], [1998, 1562.0], [2002, 1562.0], [2006, 1525.2], [2010, 1525.2], [2014, 1513.0], [2018, 1515.8], [2022, 1526.1]], "Bulgaria": [[1966, 1492.2], [1970, 1492.2], [1974, 1492.6], [1978, 1492.6], [1982, 1492.6], [1986, 1492.6], [1990, 1492.6], [1994, 1478.5], [1998, 1478.5], [2002, 1478.5], [2006, 1478.5], [2010, 1478.5], [2014, 1478.5], [2018, 1478.5], [2022, 1478.5]], "Korea DPR": [[1966, 1483.0], [1970, 1483.0], [1974, 1483.0], [1978, 1483.0], [1982, 1483.0], [1986, 1483.0], [1990, 1483.0], [1994, 1483.0], [1998, 1483.0], [2002, 1483.0], [2006, 1483.0], [2010, 1483.0], [2014, 1483.0], [2018, 1483.0], [2022, 1483.0]], "Israel": [[1970, 1487.2], [1974, 1487.2], [1978, 1487.2], [1982, 1487.2], [1986, 1487.2], [1990, 1487.2], [1994, 1487.2], [1998, 1487.2], [2002, 1487.2], [2006, 1487.2], [2010, 1487.2], [2014, 1487.2], [2018, 1487.2], [2022, 1487.2]], "Morocco": [[1970, 1489.3], [1974, 1489.3], [1978, 1489.3], [1982, 1489.3], [1986, 1489.3], [1990, 1489.3], [1994, 1489.3], [1998, 1489.3], [2002, 1489.3], [2006, 1489.3], [2010, 1489.3], [2014, 1489.3], [2018, 1489.3], [2022, 1492.8]], "Zaire": [[1974, 1469.2], [1978, 1469.2], [1982, 1469.2], [1986, 1469.2], [1990, 1469.2], [1994, 1469.2], [1998, 1469.2], [2002, 1469.2], [2006, 1469.2], [2010, 1469.2], [2014, 1469.2], [2018, 1469.2], [2022, 1469.2]], "Netherlands": [[1974, 1597.2], [1978, 1560.0], [1982, 1560.0], [1986, 1560.0], [1990, 1536.1], [1994, 1515.7], [1998, 1520.9], [2002, 1520.9], [2006, 1513.7], [2010, 1572.6], [2014, 1637.2], [2018, 1637.2], [2022, 1650.5]], "Poland": [[1974, 1524.9], [1978, 1526.5], [1982, 1532.3], [1986, 1532.3], [1990, 1532.3], [1994, 1532.3], [1998, 1532.3], [2002, 1532.3], [2006, 1532.3], [2010, 1532.3], [2014, 1532.3], [2018, 1532.3], [2022, 1528.1]], "Tunisia": [[1978, 1511.0], [1982, 1511.0], [1986, 1511.0], [1990, 1511.0], [1994, 1511.0], [1998, 1511.0], [2002, 1511.0], [2006, 1511.0], [2010, 1511.0], [2014, 1511.0], [2018, 1494.5], [2022, 1475.2]], "Algeria": [[1982, 1516.5], [1986, 1516.5], [1990, 1516.5], [1994, 1516.5], [1998, 1516.5], [2002, 1516.5], [2006, 1516.5], [2010, 1516.5], [2014, 1502.3], [2018, 1502.3], [2022, 1502.3]], "Honduras": [[1982, 1499.4], [1986, 1499.4], [1990, 1499.4], [1994, 1499.4], [1998, 1499.4], [2002, 1499.4], [2006, 1499.4], [2010, 1499.4], [2014, 1488.9], [2018, 1488.9], [2022, 1488.9]], "Cameroon": [[1990, 1497.9], [1994, 1497.9], [1998, 1497.9], [2002, 1497.9], [2006, 1497.9], [2010, 1497.9], [2014, 1497.9], [2018, 1497.9], [2022, 1475.5]], "Ireland": [[1990, 1500.9], [1994, 1500.9], [1998, 1500.9], [2002, 1500.9], [2006, 1500.9], [2010, 1500.9], [2014, 1500.9], [2018, 1500.9], [2022, 1500.9]], "Colombia": [[1994, 1467.8], [1998, 1467.8], [2002, 1467.8], [2006, 1467.8], [2010, 1467.8], [2014, 1493.1], [2018, 1496.4], [2022, 1496.4]], "Nigeria": [[1994, 1506.2], [1998, 1520.5], [2002, 1520.5], [2006, 1520.5], [2010, 1504.9], [2014, 1504.9], [2018, 1504.9], [2022, 1504.9]], "South Africa": [[1998, 1481.1], [2002, 1481.1], [2006, 1481.1], [2010, 1476.5], [2014, 1476.5], [2018, 1476.5], [2022, 1476.5]], "Japan": [[1998, 1485.8], [2002, 1482.4], [2006, 1482.4], [2010, 1482.4], [2014, 1482.4], [2018, 1449.6], [2022, 1485.0]], "Senegal": [[2002, 1521.1], [2006, 1521.1], [2010, 1521.1], [2014, 1521.1], [2018, 1521.1], [2022, 1479.9]], "Saudi Arabia": [[2002, 1486.1], [2006, 1486.1], [2010, 1486.1], [2014, 1486.1], [2018, 1461.5], [2022, 1466.7]], "Costa Rica": [[2006, 1488.1], [2010, 1488.1], [2014, 1498.0], [2018, 1498.0], [2022, 1499.1]], "Serbia": [[2006, 1480.6], [2010, 1480.6], [2014, 1480.6], [2018, 1480.6], [2022, 1465.4]], "Côte d'Ivoire": [[2006, 1484.9], [2010, 1484.9], [2014, 1484.9], [2018, 1484.9], [2022, 1484.9]], "Ecuador": [[2006, 1477.7], [2010, 1477.7], [2014, 1477.7], [2018, 1477.7], [2022, 1504.7]], "Ukraine": [[2006, 1482.8], [2010, 1482.8], [2014, 1482.8], [2018, 1482.8], [2022, 1482.8]], "Australia": [[2010, 1488.5], [2014, 1488.5], [2018, 1478.9], [2022, 1467.1]], "Denmark": [[2010, 1482.8], [2014, 1482.8], [2018, 1482.8], [2022, 1476.5]], "Ghana": [[2010, 1499.8], [2014, 1499.8], [2018, 1499.8], [2022, 1496.4]], "Slovakia": [[2010, 1477.5], [2014, 1477.5], [2018, 1477.5], [2022, 1477.5]], "Greece": [[2014, 1478.3], [2018, 1478.3], [2022, 1478.3]], "Bosnia and Herzegovina": [[2014, 1485.1], [2018, 1485.1], [2022, 1485.1]], "Egypt": [[2018, 1479.6], [2022, 1479.6]], "Iceland": [[2018, 1502.5], [2022, 1502.5]], "Qatar": [[2022, 1479.6]], "Iran": [[2022, 1501.0]], "Canada": [[2022, 1460.0]]};
-const WIN_PCTS={"Sweden": 0.8, "Morocco": 1.2, "T\u00fcrkiye": 1.1, "Cape Verde": 0.1, "Spain": 3.4, "Canada": 0.5, "USA": 0.6, "Ecuador": 0.9, "France": 33.1, "Belgium": 1.3, "Netherlands": 12.9, "Ghana": 0.9, "Croatia": 0.7, "South Africa": 0.5, "Australia": 0.6, "Argentina": 7.3, "Austria": 0.6, "IR Iran": 0.9, "Portugal": 1.3, "Ivory Coast": 0.7, "Colombia": 1.5, "Norway": 0.7, "Mexico": 0.1, "Brazil": 4.2, "Algeria": 0.9, "Korea Republic": 0.0, "Switzerland": 0.3, "Germany": 17.7, "Japan": 1.1, "Egypt": 0.8, "Bosnia and Herzegovina": 0.9, "England": 2.3};
-const ANALYSES={"Sweden": "AI analysis for Sweden will load on the next workflow run.", "Morocco": "AI analysis for Morocco will load on the next workflow run.", "Türkiye": "AI analysis for Türkiye will load on the next workflow run.", "Cape Verde": "AI analysis for Cape Verde will load on the next workflow run.", "Spain": "AI analysis for Spain will load on the next workflow run.", "Canada": "AI analysis for Canada will load on the next workflow run.", "USA": "AI analysis for USA will load on the next workflow run.", "Ecuador": "AI analysis for Ecuador will load on the next workflow run.", "France": "AI analysis for France will load on the next workflow run.", "Belgium": "AI analysis for Belgium will load on the next workflow run.", "Netherlands": "AI analysis for Netherlands will load on the next workflow run.", "Ghana": "AI analysis for Ghana will load on the next workflow run.", "Croatia": "AI analysis for Croatia will load on the next workflow run.", "South Africa": "AI analysis for South Africa will load on the next workflow run.", "Australia": "AI analysis for Australia will load on the next workflow run.", "Argentina": "AI analysis for Argentina will load on the next workflow run.", "Austria": "AI analysis for Austria will load on the next workflow run.", "IR Iran": "AI analysis for IR Iran will load on the next workflow run.", "Portugal": "AI analysis for Portugal will load on the next workflow run.", "Ivory Coast": "AI analysis for Ivory Coast will load on the next workflow run.", "Colombia": "AI analysis for Colombia will load on the next workflow run.", "Norway": "AI analysis for Norway will load on the next workflow run.", "Mexico": "AI analysis for Mexico will load on the next workflow run.", "Brazil": "AI analysis for Brazil will load on the next workflow run.", "Algeria": "AI analysis for Algeria will load on the next workflow run.", "Korea Republic": "AI analysis for Korea Republic will load on the next workflow run.", "Switzerland": "AI analysis for Switzerland will load on the next workflow run.", "Germany": "AI analysis for Germany will load on the next workflow run.", "Japan": "AI analysis for Japan will load on the next workflow run.", "Egypt": "AI analysis for Egypt will load on the next workflow run.", "Bosnia and Herzegovina": "AI analysis for Bosnia and Herzegovina will load on the next workflow run.", "England": "AI analysis for England will load on the next workflow run."};
+const WIN_PCTS={"Bosnia and Herzegovina": 0.7, "South Africa": 0.5, "IR Iran": 1.0, "Australia": 0.5, "Germany": 16.2, "Algeria": 0.6, "Egypt": 1.0, "Portugal": 1.4, "France": 34.7, "Belgium": 1.0, "Croatia": 1.1, "Ivory Coast": 1.0, "Brazil": 4.0, "Netherlands": 12.4, "Korea Republic": 0.1, "Austria": 0.5, "Ghana": 1.0, "Colombia": 1.3, "Ecuador": 1.0, "T\u00fcrkiye": 1.4, "Spain": 3.8, "Canada": 0.5, "England": 2.4, "Cape Verde": 0.0, "Morocco": 1.4, "Argentina": 6.8, "Switzerland": 0.2, "Sweden": 0.9, "USA": 0.7, "Norway": 0.6, "Mexico": 0.2, "Japan": 0.9};
+const FINAL_PCTS={"Bosnia and Herzegovina": 2.4, "South Africa": 2.3, "IR Iran": 2.7, "Australia": 2.0, "Germany": 27.1, "Algeria": 2.6, "Egypt": 2.9, "Portugal": 4.4, "France": 44.3, "Belgium": 3.8, "Croatia": 3.0, "Ivory Coast": 3.1, "Brazil": 9.5, "Netherlands": 22.6, "Korea Republic": 0.4, "Austria": 2.0, "Ghana": 3.0, "Colombia": 4.3, "Ecuador": 3.8, "T\u00fcrkiye": 4.1, "Spain": 9.4, "Canada": 2.1, "England": 6.3, "Cape Verde": 0.6, "Morocco": 4.2, "Argentina": 15.0, "Switzerland": 1.0, "Sweden": 2.7, "USA": 2.4, "Norway": 2.1, "Mexico": 0.9, "Japan": 3.1};
+const SEMI_PCTS={"Bosnia and Herzegovina": 7.2, "South Africa": 6.7, "IR Iran": 8.5, "Australia": 6.9, "Germany": 40.6, "Algeria": 8.4, "Egypt": 7.2, "Portugal": 11.5, "France": 56.4, "Belgium": 9.7, "Croatia": 8.1, "Ivory Coast": 8.5, "Brazil": 19.5, "Netherlands": 35.5, "Korea Republic": 1.8, "Austria": 6.4, "Ghana": 8.3, "Colombia": 10.6, "Ecuador": 10.0, "T\u00fcrkiye": 10.8, "Spain": 19.3, "Canada": 6.1, "England": 14.4, "Cape Verde": 2.8, "Morocco": 10.4, "Argentina": 27.5, "Switzerland": 3.6, "Sweden": 7.9, "USA": 6.9, "Norway": 7.0, "Mexico": 3.3, "Japan": 8.5};
+const QF_PCTS={"Bosnia and Herzegovina": 20.2, "South Africa": 18.1, "IR Iran": 20.2, "Australia": 17.8, "Germany": 57.3, "Algeria": 21.1, "Egypt": 19.1, "Portugal": 25.5, "France": 69.4, "Belgium": 23.6, "Croatia": 20.0, "Ivory Coast": 21.2, "Brazil": 36.3, "Netherlands": 52.4, "Korea Republic": 8.0, "Austria": 17.3, "Ghana": 20.6, "Colombia": 23.9, "Ecuador": 22.2, "T\u00fcrkiye": 23.8, "Spain": 35.8, "Canada": 17.0, "England": 28.6, "Cape Verde": 9.2, "Morocco": 23.8, "Argentina": 44.4, "Switzerland": 13.5, "Sweden": 20.2, "USA": 18.2, "Norway": 19.0, "Mexico": 12.1, "Japan": 20.3};
+const ANALYSES={"Mexico": "3W 0D 0L · 7 scored · 1 conceded · GD +6 · ELO 1428 · Win 0.2% · Final 0.9% · Semi 3.3%", "South Africa": "1W 1D 1L · 3 scored · 3 conceded · GD +0 · ELO 1496 · Win 0.5% · Final 2.3% · Semi 6.7%", "Korea Republic": "1W 0D 2L · 3 scored · 5 conceded · GD -2 · ELO 1379 · Win 0.1% · Final 0.4% · Semi 1.8%", "Czechia": "0W 1D 2L · 2 scored · 6 conceded · GD -4 · ELO 1471 · Win 0% · Final 0% · Semi 0%", "Switzerland": "2W 1D 0L · 5 scored · 2 conceded · GD +3 · ELO 1447 · Win 0.2% · Final 1.0% · Semi 3.6%", "Canada": "1W 1D 1L · 4 scored · 3 conceded · GD +1 · ELO 1483 · Win 0.5% · Final 2.1% · Semi 6.1%", "Bosnia and Herzegovina": "1W 1D 1L · 3 scored · 3 conceded · GD +0 · ELO 1505 · Win 0.7% · Final 2.4% · Semi 7.2%", "Qatar": "0W 1D 2L · 1 scored · 5 conceded · GD -4 · ELO 1473 · Win 0% · Final 0% · Semi 0%", "Brazil": "2W 1D 0L · 6 scored · 2 conceded · GD +4 · ELO 1624 · Win 4.0% · Final 9.5% · Semi 19.5%", "Morocco": "2W 1D 0L · 5 scored · 1 conceded · GD +4 · ELO 1540 · Win 1.4% · Final 4.2% · Semi 10.4%", "Scotland": "1W 0D 2L · 2 scored · 5 conceded · GD -3 · ELO 1506 · Win 0% · Final 0% · Semi 0%", "Haiti": "0W 0D 3L · 0 scored · 5 conceded · GD -5 · ELO 1325 · Win 0% · Final 0% · Semi 0%", "USA": "2W 0D 1L · 8 scored · 7 conceded · GD +1 · ELO 1487 · Win 0.7% · Final 2.4% · Semi 6.9%", "Türkiye": "2W 0D 1L · 6 scored · 7 conceded · GD -1 · ELO 1544 · Win 1.4% · Final 4.1% · Semi 10.8%", "Australia": "1W 2D 0L · 3 scored · 3 conceded · GD +0 · ELO 1492 · Win 0.5% · Final 2.0% · Semi 6.9%", "Paraguay": "1W 2D 0L · 3 scored · 3 conceded · GD +0 · ELO 1430 · Win 0% · Final 0% · Semi 0%", "Germany": "2W 0D 1L · 5 scored · 4 conceded · GD +1 · ELO 1747 · Win 16.2% · Final 27.1% · Semi 40.6%", "Ivory Coast": "2W 0D 1L · 5 scored · 4 conceded · GD +1 · ELO 1518 · Win 1.0% · Final 3.1% · Semi 8.5%", "Ecuador": "1W 1D 1L · 4 scored · 3 conceded · GD +1 · ELO 1528 · Win 1.0% · Final 3.8% · Semi 10.0%", "Curaçao": "0W 1D 2L · 1 scored · 5 conceded · GD -4 · ELO 1343 · Win 0% · Final 0% · Semi 0%", "Netherlands": "3W 1D 0L · 9 scored · 3 conceded · GD +6 · ELO 1718 · Win 12.4% · Final 22.6% · Semi 35.5%", "Japan": "1W 3D 0L · 4 scored · 3 conceded · GD +1 · ELO 1518 · Win 0.9% · Final 3.1% · Semi 8.5%", "Sweden": "1W 2D 1L · 4 scored · 4 conceded · GD +0 · ELO 1515 · Win 0.9% · Final 2.7% · Semi 7.9%", "Tunisia": "0W 0D 3L · 1 scored · 8 conceded · GD -7 · ELO 1454 · Win 0% · Final 0% · Semi 0%", "Belgium": "1W 2D 0L · 7 scored · 3 conceded · GD +4 · ELO 1541 · Win 1.0% · Final 3.8% · Semi 9.7%", "Egypt": "1W 2D 0L · 3 scored · 2 conceded · GD +1 · ELO 1508 · Win 1.0% · Final 2.9% · Semi 7.2%", "IR Iran": "0W 3D 0L · 3 scored · 3 conceded · GD +0 · ELO 1516 · Win 1.0% · Final 2.7% · Semi 8.5%", "New Zealand": "0W 1D 2L · 2 scored · 7 conceded · GD -5 · ELO 1370 · Win 0% · Final 0% · Semi 0%", "Spain": "2W 1D 0L · 4 scored · 1 conceded · GD +3 · ELO 1611 · Win 3.8% · Final 9.4% · Semi 19.3%", "Cape Verde": "0W 3D 0L · 2 scored · 2 conceded · GD +0 · ELO 1405 · Win 0.0% · Final 0.6% · Semi 2.8%", "Uruguay": "0W 2D 1L · 2 scored · 3 conceded · GD -1 · ELO 1419 · Win 0% · Final 0% · Semi 0%", "Saudi Arabia": "0W 2D 1L · 1 scored · 3 conceded · GD -2 · ELO 1471 · Win 0% · Final 0% · Semi 0%", "France": "3W 0D 0L · 9 scored · 2 conceded · GD +7 · ELO 1834 · Win 34.7% · Final 44.3% · Semi 56.4%", "Norway": "2W 0D 1L · 6 scored · 5 conceded · GD +1 · ELO 1503 · Win 0.6% · Final 2.1% · Semi 7.0%", "Senegal": "1W 0D 2L · 5 scored · 8 conceded · GD -3 · ELO 1486 · Win 0% · Final 0% · Semi 0%", "Iraq": "0W 0D 3L · 0 scored · 9 conceded · GD -9 · ELO 1363 · Win 0% · Final 0% · Semi 0%", "Argentina": "2W 0D 0L · 6 scored · 1 conceded · GD +5 · ELO 1668 · Win 6.8% · Final 15.0% · Semi 27.5%", "Austria": "1W 0D 1L · 2 scored · 3 conceded · GD -1 · ELO 1493 · Win 0.5% · Final 2.0% · Semi 6.4%", "Algeria": "1W 0D 1L · 2 scored · 3 conceded · GD -1 · ELO 1514 · Win 0.6% · Final 2.6% · Semi 8.4%", "Jordan": "0W 0D 2L · 0 scored · 3 conceded · GD -3 · ELO 1371 · Win 0% · Final 0% · Semi 0%", "Colombia": "2W 0D 0L · 5 scored · 1 conceded · GD +4 · ELO 1538 · Win 1.3% · Final 4.3% · Semi 10.6%", "Portugal": "1W 1D 0L · 4 scored · 2 conceded · GD +2 · ELO 1552 · Win 1.4% · Final 4.4% · Semi 11.5%", "Congo DR": "0W 1D 1L · 1 scored · 3 conceded · GD -2 · ELO 1389 · Win 0% · Final 0% · Semi 0%", "Uzbekistan": "0W 0D 2L · 0 scored · 4 conceded · GD -4 · ELO 1348 · Win 0% · Final 0% · Semi 0%", "England": "1W 1D 0L · 3 scored · 1 conceded · GD +2 · ELO 1578 · Win 2.4% · Final 6.3% · Semi 14.4%", "Ghana": "1W 1D 0L · 3 scored · 1 conceded · GD +2 · ELO 1522 · Win 1.0% · Final 3.0% · Semi 8.3%", "Croatia": "1W 0D 1L · 2 scored · 2 conceded · GD +0 · ELO 1510 · Win 1.1% · Final 3.0% · Semi 8.1%", "Panama": "0W 0D 2L · 0 scored · 4 conceded · GD -4 · ELO 1368 · Win 0% · Final 0% · Semi 0%"};
 
 const FLAGS={"Mexico":"🇲🇽","South Africa":"🇿🇦","Korea Republic":"🇰🇷","Czechia":"🇨🇿","Czech Republic":"🇨🇿","Switzerland":"🇨🇭","Canada":"🇨🇦","Bosnia and Herzegovina":"🇧🇦","Qatar":"🇶🇦","Brazil":"🇧🇷","Morocco":"🇲🇦","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","Haiti":"🇭🇹","USA":"🇺🇸","Australia":"🇦🇺","Paraguay":"🇵🇾","Türkiye":"🇹🇷","Turkey":"🇹🇷","Germany":"🇩🇪","Ivory Coast":"🇨🇮","Côte d'Ivoire":"🇨🇮","Ecuador":"🇪🇨","Curaçao":"🇨🇼","Netherlands":"🇳🇱","Japan":"🇯🇵","Sweden":"🇸🇪","Tunisia":"🇹🇳","Egypt":"🇪🇬","Iran":"🇮🇷","IR Iran":"🇮🇷","Belgium":"🇧🇪","New Zealand":"🇳🇿","Spain":"🇪🇸","Uruguay":"🇺🇾","Cape Verde":"🇨🇻","Saudi Arabia":"🇸🇦","France":"🇫🇷","Norway":"🇳🇴","Senegal":"🇸🇳","Iraq":"🇮🇶","Argentina":"🇦🇷","Austria":"🇦🇹","Algeria":"🇩🇿","Jordan":"🇯🇴","Colombia":"🇨🇴","Portugal":"🇵🇹","Congo DR":"🇨🇩","Uzbekistan":"🇺🇿","England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Ghana":"🇬🇭","Croatia":"🇭🇷","Panama":"🇵🇦","TBD":"❓"};
 function f(n){return FLAGS[n]||"🏳";}
+
 const ALIASES={"Türkiye":"Turkey","IR Iran":"Iran","Czechia":"Czech Republic","Bosnia and Herzegovina":"Bosnia and Herzegovina","Korea Republic":"Korea Republic","Congo DR":"Cameroon","Ivory Coast":"Côte d'Ivoire"};
 function getBaseElo(n){return HISTORICAL_ELO[n]||HISTORICAL_ELO[ALIASES[n]]||1470;}
 function getFormBonus(n){for(const g of GROUPS_DATA){for(const t of g.teams){if(t.name===n)return Math.max(-80,Math.min(80,(t.w*3+t.d)*5+(t.gf-t.ga)*3));}}return 0;}
 function getLiveElo(n){return getBaseElo(n)+getFormBonus(n);}
 function winProb(a,b){if(!a||!b||a==="TBD"||b==="TBD")return 0.5;return 1/(1+Math.pow(10,(getLiveElo(b)-getLiveElo(a))/400));}
+function getTeamData(name){for(const g of GROUPS_DATA){for(const t of g.teams){if(t.name===name)return{...t,group:g.group};}}return null;}
 
 document.getElementById("updatedAt").textContent=UPDATED;
 let through=0,elim=0,played=0;
@@ -157,6 +267,7 @@ function getRankedThirds(){
   return GROUPS_DATA.map(g=>{const s=[...g.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);return{...s[2],group:g.group};}).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||getLiveElo(b.name)-getLiveElo(a.name));
 }
 
+// ── GROUPS ──────────────────────────────────────────────────────────────────
 function buildGroups(){
   const thirdsOut=new Set(getRankedThirds().slice(8).map(t=>t.name));
   const grid=document.getElementById("groupsGrid");
@@ -175,118 +286,77 @@ function buildGroups(){
   });
 }
 
-function lookupCombo(advGroups){
-  const key=[...advGroups].sort().join('');
-  if(COMBO_MAP[key])return COMBO_MAP[key];
-  let best=null,bestScore=0;
-  for(const[k,v]of Object.entries(COMBO_MAP)){
-    if(k.length!==8)continue;
-    const score=advGroups.filter(g=>k.includes(g)).length;
-    if(score>bestScore){bestScore=score;best=v;}
-  }
-  return best;
-}
-
-function getR32(){
-  const gmap={};
-  GROUPS_DATA.forEach(grp=>{const s=[...grp.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);gmap[grp.group]={W:s[0].name,R:s[1].name};});
-  const top8=getRankedThirds().slice(0,8);
-  const combo=lookupCombo(top8.map(t=>t.group));
-  const thirdByGroup={};top8.forEach(t=>thirdByGroup[t.group]=t.name);
-  function W(g){return gmap[g]?gmap[g].W:"TBD";}
-  function R(g){return gmap[g]?gmap[g].R:"TBD";}
-  function get3rd(slot){if(!combo||!slot)return"TBD";return thirdByGroup[slot[1]]||"TBD";}
-  return[[R('A'),R('B')],[W('E'),get3rd(combo&&combo['E'])],[W('F'),R('C')],[W('C'),R('F')],[W('I'),get3rd(combo&&combo['I'])],[R('E'),R('I')],[W('A'),get3rd(combo&&combo['A'])],[W('L'),get3rd(combo&&combo['L'])],[W('D'),get3rd(combo&&combo['D'])],[W('G'),get3rd(combo&&combo['G'])],[R('K'),R('L')],[W('H'),R('J')],[W('B'),get3rd(combo&&combo['B'])],[W('J'),R('H')],[W('K'),get3rd(combo&&combo['K'])],[R('D'),R('G')]];
-}
-
-function buildPredictor(){
-  const r32=getR32();
-  const allTeams=new Set(r32.flat().filter(t=>t&&t!=="TBD"));
-  const ranked=[...allTeams].map(t=>({name:t,pct:WIN_PCTS[t]||0})).sort((a,b)=>b.pct-a.pct);
-  const maxPct=ranked[0]?.pct||1;
-  const colors=["#f59e0b","#3b82f6","#10b981","#ef4444","#8b5cf6","#ec4899"];
-  const tbody=document.getElementById("probBody");
-  tbody.innerHTML="";
-  ranked.forEach((t,i)=>{
-    const color=colors[Math.min(Math.floor(i/5),colors.length-1)];
-    const barW=Math.round(t.pct/maxPct*100);
-    const tr=document.createElement("tr");tr.className="clickable";
-    tr.innerHTML=`<td class="rank-num">${i+1}</td><td><span style="font-size:16px">${f(t.name)}</span> ${t.name}</td><td class="pct-val">${t.pct}%</td><td><div class="prob-bar-wrap"><div class="prob-bar" style="width:${barW}%;background:${color}"></div></div></td>`;
-    tr.addEventListener("click",()=>{
-      document.querySelectorAll(".prob-table tr").forEach(r=>r.classList.remove("active-row"));
-      tr.classList.add("active-row");
-      showAnalysis(t.name,t.pct);
-    });
-    tbody.appendChild(tr);
-  });
-
-  // Build most-likely bracket deterministically
-  const bEl=document.getElementById("bracketEl");bEl.innerHTML="";
-  const roundNames=["Round of 32","Round of 16","Quarterfinals","Semifinals","Final"];
-  let current=r32.map(m=>[m[0],m[1]]);
-  const allRounds=[current];
-  while(current.length>1){
-    const next=[];
-    for(let i=0;i<current.length;i+=2){
-      const w1=winProb(current[i][0],current[i][1])>=0.5?current[i][0]:current[i][1];
-      const w2=winProb(current[i+1][0],current[i+1][1])>=0.5?current[i+1][0]:current[i+1][1];
-      next.push([w1,w2]);
-    }
-    allRounds.push(next);current=next;
-  }
-  allRounds.forEach((round,ri)=>{
-    if(ri===allRounds.length-1)return;
-    const col=document.createElement("div");col.className="round-col";
-    const winners=ri+1<allRounds.length?allRounds[ri+1].flat():[];
-    const mb=Math.pow(2,ri)*2;
-    col.innerHTML=`<div class="round-title">${roundNames[Math.min(ri,4)]}</div>`;
-    round.forEach(([a,b])=>{
-      const pa=Math.round(winProb(a,b)*100);
-      const winner=winners.find(w=>w===a||w===b);
-      const aWin=winner===a;
-      col.insertAdjacentHTML("beforeend",`<div class="matchup" style="margin-bottom:${mb}px"><div class="m-team ${a!=="TBD"&&aWin?"win":a!=="TBD"&&!aWin?"lose":""}"><span class="m-flag">${f(a)}</span><span class="m-name">${a}</span><span class="m-prob">${a!=="TBD"?pa+"%":""}</span></div><div class="m-div"></div><div class="m-team ${b!=="TBD"&&!aWin?"win":b!=="TBD"&&aWin?"lose":""}"><span class="m-flag">${f(b)}</span><span class="m-name">${b}</span><span class="m-prob">${b!=="TBD"?(100-pa)+"%":""}</span></div></div>`);
-    });
-    bEl.appendChild(col);
-  });
-}
-
-function showAnalysis(team,pct){
-  document.getElementById("aFlag").textContent=f(team);
-  document.getElementById("aTeam").textContent=team;
-  document.getElementById("aElo").textContent=`ELO: ${Math.round(getLiveElo(team))}`;
-  document.getElementById("aWin").textContent=pct+"%";
-  document.getElementById("aBody").textContent=ANALYSES[team]||"Analysis not yet available — check back after the next update.";
-  const panel=document.getElementById("analysisPanel");
-  panel.classList.add("vis");
-  panel.scrollIntoView({behavior:"smooth",block:"nearest"});
-}
-
+// ── ELO CHART WITH TOOLTIPS ─────────────────────────────────────────────────
 const BAR_COLORS=["#3b82f6","#10b981","#f59e0b","#ef4444","#8b5cf6","#ec4899"];
+let chartPoints=[];// store pixel positions for tooltip hit-test
+
 function getHist(n){const al={"Türkiye":"Turkey","IR Iran":"Iran","Czechia":"Czech Republic","Bosnia and Herzegovina":"Bosnia and Herzegovina","Korea Republic":"Korea Republic","Ivory Coast":"Côte d'Ivoire"};return ELO_HISTORY[n]||ELO_HISTORY[al[n]]||null;}
+
 function drawChart(name){
   const hist=getHist(name);const panel=document.getElementById("chartPanel");
   document.getElementById("chartName").textContent=f(name)+" "+name;panel.classList.add("vis");
-  if(!hist||hist.length<2){document.getElementById("chartHint").textContent="No historical WC data.";return;}
+  if(!hist||hist.length<2){document.getElementById("chartHint").textContent="No historical WC data for this team.";chartPoints=[];return;}
   const canvas=document.getElementById("eloChart");const dpr=window.devicePixelRatio||1;
   const rect=canvas.parentElement.getBoundingClientRect();
-  canvas.width=rect.width*dpr;canvas.height=160*dpr;canvas.style.width=rect.width+"px";canvas.style.height="160px";
+  canvas.width=rect.width*dpr;canvas.height=180*dpr;
+  canvas.style.width=rect.width+"px";canvas.style.height="180px";
   const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
-  const W=rect.width,H=160,pad={t:16,r:24,b:32,l:52};
+  const W=rect.width,H=180,pad={t:16,r:24,b:36,l:52};
   const iW=W-pad.l-pad.r,iH=H-pad.t-pad.b;ctx.clearRect(0,0,W,H);
   const yrs=hist.map(p=>p[0]),vals=hist.map(p=>p[1]);
   const minY=Math.min(...vals)-40,maxY=Math.max(...vals)+40;
   const cx=yr=>pad.l+(yr-yrs[0])/(yrs[yrs.length-1]-yrs[0]||1)*iW;
   const cy=v=>pad.t+iH-(v-minY)/(maxY-minY)*iH;
-  [1400,1500,1600,1700,1800].forEach(v=>{if(v<minY||v>maxY)return;ctx.strokeStyle="rgba(255,255,255,0.05)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,cy(v));ctx.lineTo(pad.l+iW,cy(v));ctx.stroke();ctx.fillStyle="rgba(255,255,255,0.25)";ctx.font="10px sans-serif";ctx.textAlign="right";ctx.fillText(v,pad.l-6,cy(v)+3);});
+  // Grid
+  [1400,1500,1600,1700,1800].forEach(v=>{
+    if(v<minY||v>maxY)return;
+    ctx.strokeStyle="rgba(255,255,255,0.05)";ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,cy(v));ctx.lineTo(pad.l+iW,cy(v));ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,0.25)";ctx.font="10px sans-serif";ctx.textAlign="right";ctx.fillText(v,pad.l-6,cy(v)+3);
+  });
+  // Year labels
   ctx.fillStyle="rgba(255,255,255,0.28)";ctx.font="10px sans-serif";ctx.textAlign="center";
-  yrs.filter((_,i)=>yrs.length<=8||i%2===0||i===yrs.length-1).forEach(yr=>ctx.fillText(yr,cx(yr),H-pad.b+14));
-  ctx.beginPath();ctx.strokeStyle="#3b82f6";ctx.lineWidth=2;ctx.lineJoin="round";
-  hist.forEach(([yr,v],i)=>i===0?ctx.moveTo(cx(yr),cy(v)):ctx.lineTo(cx(yr),cy(v)));ctx.stroke();
+  yrs.filter((_,i)=>yrs.length<=8||i%2===0||i===yrs.length-1).forEach(yr=>ctx.fillText(yr,cx(yr),H-pad.b+16));
+  // Area fill
   ctx.beginPath();hist.forEach(([yr,v],i)=>i===0?ctx.moveTo(cx(yr),cy(v)):ctx.lineTo(cx(yr),cy(v)));
   ctx.lineTo(cx(yrs[yrs.length-1]),cy(minY));ctx.lineTo(cx(yrs[0]),cy(minY));ctx.closePath();ctx.fillStyle="rgba(59,130,246,0.08)";ctx.fill();
-  hist.forEach(([yr,v])=>{ctx.beginPath();ctx.arc(cx(yr),cy(v),3.5,0,Math.PI*2);ctx.fillStyle="#60a5fa";ctx.fill();});
-  ctx.fillStyle="#60a5fa";ctx.font="bold 11px sans-serif";ctx.textAlign="left";ctx.fillText(Math.round(vals[vals.length-1]),cx(yrs[yrs.length-1])+8,cy(vals[vals.length-1])+4);
+  // Line
+  ctx.beginPath();ctx.strokeStyle="#3b82f6";ctx.lineWidth=2;ctx.lineJoin="round";
+  hist.forEach(([yr,v],i)=>i===0?ctx.moveTo(cx(yr),cy(v)):ctx.lineTo(cx(yr),cy(v)));ctx.stroke();
+  // Dots + store positions
+  chartPoints=[];
+  hist.forEach(([yr,v])=>{
+    const px=cx(yr),py=cy(v);
+    chartPoints.push({x:px,y:py,year:yr,elo:Math.round(v)});
+    ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fillStyle="#60a5fa";ctx.fill();
+    ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle="#0a0f1e";ctx.fill();
+  });
+  // Last value label
+  ctx.fillStyle="#60a5fa";ctx.font="bold 11px sans-serif";ctx.textAlign="left";
+  ctx.fillText(Math.round(vals[vals.length-1]),cx(yrs[yrs.length-1])+8,cy(vals[vals.length-1])+4);
 }
+
+// Tooltip mouse handler
+const canvas=document.getElementById("eloChart");
+const tooltip=document.getElementById("chartTooltip");
+canvas.addEventListener("mousemove",e=>{
+  if(!chartPoints.length)return;
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  let closest=null,minDist=Infinity;
+  chartPoints.forEach(p=>{const d=Math.hypot(p.x-mx,p.y-my);if(d<minDist){minDist=d;closest=p;}});
+  if(closest&&minDist<24){
+    tooltip.style.display="block";
+    tooltip.style.left=(closest.x+12)+"px";
+    tooltip.style.top=Math.max(0,closest.y-36)+"px";
+    document.getElementById("ttYear").textContent=closest.year+" World Cup";
+    document.getElementById("ttElo").textContent="ELO: "+closest.elo;
+  } else {
+    tooltip.style.display="none";
+  }
+});
+canvas.addEventListener("mouseleave",()=>tooltip.style.display="none");
+
 function buildRatings(){
   const list=document.getElementById("ratingsList");
   const all=GROUPS_DATA.flatMap(g=>g.teams.map(t=>({name:t.name,group:g.group,elo:Math.round(getLiveElo(t.name)),base:Math.round(getBaseElo(t.name)),form:Math.round(getFormBonus(t.name))})));
@@ -299,11 +369,153 @@ function buildRatings(){
     list.appendChild(row);
   });
 }
+
+// ── BRACKET ─────────────────────────────────────────────────────────────────
+function lookupCombo(advGroups){
+  const key=[...advGroups].sort().join('');
+  if(COMBO_MAP[key])return COMBO_MAP[key];
+  let best=null,bestScore=0;
+  for(const[k,v]of Object.entries(COMBO_MAP)){
+    if(k.length!==8)continue;const score=advGroups.filter(g=>k.includes(g)).length;
+    if(score>bestScore){bestScore=score;best=v;}
+  }
+  return best;
+}
+function getR32(){
+  const gmap={};
+  GROUPS_DATA.forEach(grp=>{const s=[...grp.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);gmap[grp.group]={W:s[0].name,R:s[1].name};});
+  const top8=getRankedThirds().slice(0,8);
+  const combo=lookupCombo(top8.map(t=>t.group));
+  const tg={};top8.forEach(t=>tg[t.group]=t.name);
+  const W=g=>gmap[g]?gmap[g].W:"TBD",R=g=>gmap[g]?gmap[g].R:"TBD";
+  const g3=s=>(!combo||!s)?"TBD":(tg[s[1]]||"TBD");
+  return[[R('A'),R('B')],[W('E'),g3(combo&&combo['E'])],[W('F'),R('C')],[W('C'),R('F')],[W('I'),g3(combo&&combo['I'])],[R('E'),R('I')],[W('A'),g3(combo&&combo['A'])],[W('L'),g3(combo&&combo['L'])],[W('D'),g3(combo&&combo['D'])],[W('G'),g3(combo&&combo['G'])],[R('K'),R('L')],[W('H'),R('J')],[W('B'),g3(combo&&combo['B'])],[W('J'),R('H')],[W('K'),g3(combo&&combo['K'])],[R('D'),R('G')]];
+}
+
+function buildPredictor(){
+  // Probability table
+  const r32=getR32();
+  const allTeams=new Set(r32.flat().filter(t=>t&&t!=="TBD"));
+  const ranked=[...allTeams].map(t=>({name:t,pct:WIN_PCTS[t]||0})).sort((a,b)=>b.pct-a.pct);
+  const maxPct=ranked[0]?.pct||1;
+  const colors=["#f59e0b","#3b82f6","#10b981","#ef4444","#8b5cf6","#ec4899","#0ea5e9","#84cc16"];
+  const tbody=document.getElementById("probBody");tbody.innerHTML="";
+  ranked.forEach((t,i)=>{
+    const color=colors[Math.min(Math.floor(i/4),colors.length-1)];
+    const barW=Math.round(t.pct/maxPct*100);
+    const tr=document.createElement("tr");tr.className="clickable";
+    tr.innerHTML=`<td style="color:var(--text-muted);font-size:12px">${i+1}</td><td><span style="font-size:15px">${f(t.name)}</span> ${t.name}</td><td class="pct-val">${t.pct}%</td><td style="width:80px"><div class="prob-bar-wrap"><div class="prob-bar" style="width:${barW}%;background:${color}"></div></div></td>`;
+    tr.addEventListener("click",()=>{
+      document.querySelectorAll(".prob-table tr").forEach(r=>r.classList.remove("active-row"));
+      tr.classList.add("active-row");showTeamCard(t.name);
+    });
+    tbody.appendChild(tr);
+  });
+
+  // Bracket
+  const bEl=document.getElementById("bracketEl");bEl.innerHTML="";
+  const roundNames=["Round of 32","Round of 16","Quarterfinals","Semifinals","Final"];
+  let current=r32.map(m=>[m[0],m[1]]);
+  const allRounds=[current];
+  while(current.length>1){
+    const next=[];
+    for(let i=0;i<current.length;i+=2){
+      next.push([winProb(current[i][0],current[i][1])>=0.5?current[i][0]:current[i][1],winProb(current[i+1][0],current[i+1][1])>=0.5?current[i+1][0]:current[i+1][1]]);
+    }
+    allRounds.push(next);current=next;
+  }
+  // Determine champion
+  const champion=winProb(current[0][0],current[0][1])>=0.5?current[0][0]:current[0][1];
+
+  allRounds.forEach((round,ri)=>{
+    const col=document.createElement("div");col.className="round-col";
+    const isLastRound=ri===allRounds.length-1;
+    const nextRoundTeams=!isLastRound?allRounds[ri+1].flat():[champion];
+    const mb=Math.pow(2,ri)*2;
+    col.innerHTML=`<div class="round-title">${roundNames[Math.min(ri,4)]}</div>`;
+    round.forEach(([a,b])=>{
+      const pa=Math.round(winProb(a,b)*100);
+      const winner=nextRoundTeams.find(w=>w===a||w===b)||null;
+      const aWin=winner===a;
+      col.insertAdjacentHTML("beforeend",`<div class="matchup" style="margin-bottom:${mb}px">
+        <div class="m-team ${a!=="TBD"&&aWin?"win":a!=="TBD"&&!aWin?"lose":""}"><span class="m-flag">${f(a)}</span><span class="m-name">${a}</span><span class="m-prob">${a!=="TBD"?pa+"%":""}</span></div>
+        <div class="m-div"></div>
+        <div class="m-team ${b!=="TBD"&&!aWin?"win":b!=="TBD"&&aWin?"lose":""}"><span class="m-flag">${f(b)}</span><span class="m-name">${b}</span><span class="m-prob">${b!=="TBD"?(100-pa)+"%":""}</span></div>
+      </div>`);
+    });
+    bEl.appendChild(col);
+  });
+
+  // Champion box
+  document.getElementById("championBox").innerHTML=`
+    <div class="champion-box">
+      <div class="champion-crown">🏆</div>
+      <div class="champion-flag">${f(champion)}</div>
+      <div class="champion-name">${champion}</div>
+      <div class="champion-prob">Predicted champion · ${(WIN_PCTS[champion]||0)}% win probability across 5,000 simulations</div>
+    </div>`;
+}
+
+function showTeamCard(name){
+  const td=getTeamData(name);if(!td)return;
+  const elo=Math.round(getLiveElo(name));
+  const maxElo=1850,minElo=1340;
+  document.getElementById("tcFlag").textContent=f(name);
+  document.getElementById("tcName").textContent=name;
+  document.getElementById("tcGroup").textContent=`Group ${td.group} · ELO ${elo}`;
+  document.getElementById("tcWin").textContent=(WIN_PCTS[name]||0)+"%";
+  document.getElementById("tcStages").innerHTML=`
+    <div class="tc-stage"><div class="tc-stage-val">${QF_PCTS[name]||0}%</div><div class="tc-stage-lbl">Reach QF</div></div>
+    <div class="tc-stage"><div class="tc-stage-val">${SEMI_PCTS[name]||0}%</div><div class="tc-stage-lbl">Reach SF</div></div>
+    <div class="tc-stage"><div class="tc-stage-val">${FINAL_PCTS[name]||0}%</div><div class="tc-stage-lbl">Reach Final</div></div>
+    <div class="tc-stage"><div class="tc-stage-val" style="color:var(--gold)">${WIN_PCTS[name]||0}%</div><div class="tc-stage-lbl">Win it</div></div>`;
+  // Form dots
+  const results=[];
+  for(let i=0;i<td.w;i++)results.push("W");
+  for(let i=0;i<td.d;i++)results.push("D");
+  for(let i=0;i<td.l;i++)results.push("L");
+  document.getElementById("tcForm").innerHTML=results.map(r=>`<div class="result-dot result-${r.toLowerCase()}">${r}</div>`).join("");
+  const eloPct=Math.round((elo-minElo)/(maxElo-minElo)*100);
+  document.getElementById("tcEloBar").style.width=eloPct+"%";
+  document.getElementById("tcEloLbl").textContent=`ELO ${elo} · ${eloPct}th percentile among all WC nations`;
+  document.getElementById("teamCard").classList.add("vis");
+}
+
+// ── HEAD TO HEAD ─────────────────────────────────────────────────────────────
+function buildH2H(){
+  const allTeams=GROUPS_DATA.flatMap(g=>g.teams.map(t=>t.name)).sort();
+  ["h2hA","h2hB"].forEach((id,idx)=>{
+    const sel=document.getElementById(id);
+    allTeams.forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=f(t)+" "+t;sel.appendChild(o);});
+    sel.selectedIndex=idx===0?0:1;
+  });
+  updateH2H();
+}
+function updateH2H(){
+  const a=document.getElementById("h2hA").value;
+  const b=document.getElementById("h2hB").value;
+  if(!a||!b||a===b){document.getElementById("h2hCard").classList.remove("vis");return;}
+  const pa=Math.round(winProb(a,b)*100),pb=100-pa;
+  const ea=Math.round(getLiveElo(a)),eb=Math.round(getLiveElo(b));
+  const tda=getTeamData(a),tdb=getTeamData(b);
+  document.getElementById("h2hFlagA").textContent=f(a);document.getElementById("h2hNameA").textContent=a;
+  document.getElementById("h2hFlagB").textContent=f(b);document.getElementById("h2hNameB").textContent=b;
+  document.getElementById("h2hProbA").textContent=pa+"%";document.getElementById("h2hProbB").textContent=pb+"%";
+  document.getElementById("h2hBarA").style.width=pa+"%";document.getElementById("h2hBarB").style.width=pb+"%";
+  document.getElementById("h2hEloA").textContent=ea;document.getElementById("h2hEloB").textContent=eb;
+  document.getElementById("h2hEloDiff").textContent=(ea>eb?"+":"")+(ea-eb);
+  document.getElementById("h2hFormA").textContent=tda?`${tda.w}-${tda.d}-${tda.l}`:"—";
+  document.getElementById("h2hGDA").textContent=tda?(tda.gd>0?"+":"")+tda.gd:"—";
+  document.getElementById("h2hGDB").textContent=tdb?(tdb.gd>0?"+":"")+tdb.gd:"—";
+  document.getElementById("h2hCard").classList.add("vis");
+}
+
 function showTab(id,el){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   document.getElementById(id).classList.add("active");el.classList.add("active");
   if(id==="predict")buildPredictor();
+  if(id==="h2h")buildH2H();
 }
 buildGroups();buildRatings();
 </script>
