@@ -2,28 +2,11 @@
 """
 Fetches live World Cup 2026 standings from worldcup26.ir
 and injects them into index.html. Run by GitHub Actions every 3 hours.
-
-worldcup26.ir /get/groups returns team_id values, not names.
-We fetch /get/teams first to build an id->name map, then join.
 """
 import json, re, urllib.request
 from datetime import datetime, timezone
 
 BASE_URL = "https://worldcup26.ir"
-
-BASE_STR = {
-    "Argentina":92,"France":91,"Spain":89,"Brazil":88,"England":86,"Germany":85,
-    "Netherlands":84,"Portugal":83,"Colombia":82,"Mexico":81,"Morocco":80,"Norway":79,
-    "Uruguay":78,"Belgium":77,"Switzerland":76,"USA":75,"United States":75,"Japan":74,
-    "Australia":73,"Ivory Coast":72,"Côte d'Ivoire":72,"Egypt":71,"Ecuador":70,
-    "Sweden":69,"Canada":68,"Croatia":67,"Czech Republic":65,"Czechia":65,
-    "Türkiye":66,"Turkey":66,"South Africa":64,"Algeria":63,"Ghana":63,
-    "Korea Republic":62,"South Korea":62,"Austria":62,
-    "Bosnia and Herzegovina":61,"Bosnia & Herz.":61,"Iran":58,"IR Iran":58,
-    "Scotland":60,"Paraguay":59,"Senegal":64,"Tunisia":55,"New Zealand":50,
-    "Saudi Arabia":54,"Cape Verde":52,"Iraq":51,"Jordan":48,"Congo DR":49,
-    "DR Congo":49,"Uzbekistan":46,"Qatar":44,"Curaçao":42,"Curacao":42,"Haiti":40,
-}
 
 def get_json(path):
     req = urllib.request.Request(
@@ -35,19 +18,15 @@ def get_json(path):
 
 def fetch_groups():
     try:
-        # Step 1 — get all teams to build id->name map
+        # Step 1 — build id->name map from /get/teams
         teams_data = get_json("/get/teams")
-        id_to_name = {}
-        id_to_group = {}
         teams_list = teams_data if isinstance(teams_data, list) else teams_data.get("teams", teams_data.get("data", []))
+        id_to_name = {}
         for t in teams_list:
             tid = str(t.get("id", t.get("team_id", "")))
             name = (t.get("name_en") or t.get("name") or "").strip()
-            group = str(t.get("groups", t.get("group", ""))).strip().upper()
             if tid and name:
                 id_to_name[tid] = name
-                id_to_group[tid] = group
-
         print(f"Loaded {len(id_to_name)} teams from /get/teams")
 
         # Step 2 — get group standings
@@ -64,8 +43,8 @@ def fetch_groups():
                 w   = int(t.get("w",  t.get("wins",   0)))
                 d   = int(t.get("d",  t.get("draws",  0)))
                 l   = int(t.get("l",  t.get("losses", 0)))
-                gf  = int(t.get("gf", t.get("goals_for",     0)))
-                ga  = int(t.get("ga", t.get("goals_against",  0)))
+                gf  = int(t.get("gf", t.get("goals_for",    0)))
+                ga  = int(t.get("ga", t.get("goals_against", 0)))
                 pts = int(t.get("pts", t.get("points", w*3+d)))
                 teams.append({"name":name,"pts":pts,"w":w,"d":d,"l":l,
                               "gf":gf,"ga":ga,"gd":gf-ga,"played":w+d+l})
@@ -94,17 +73,32 @@ def build_html(groups):
     with open("index.html", "r") as f:
         html = f.read()
 
-    html = re.sub(
-        r'const UPDATED = ".*?";',
-        f'const UPDATED = "{updated}";',
-        html
-    )
-    html = re.sub(
-        r"const GROUPS_DATA = \[.*?\];",
-        f"const GROUPS_DATA = {json.dumps(groups, separators=(',',':'))};",
-        html,
-        flags=re.DOTALL
-    )
+    # Use plain string split/join instead of re.sub to avoid unicode escape issues
+    # Replace timestamp
+    start_ts = 'const UPDATED = "'
+    end_ts   = '";'
+    i = html.index(start_ts)
+    j = html.index(end_ts, i) + len(end_ts)
+    html = html[:i] + f'{start_ts}{updated}"{end_ts[1:]}' + html[j:]
+
+    # Replace groups data — find the block between the marker comments
+    data_str = json.dumps(groups, separators=(',', ':'), ensure_ascii=True)
+    start_marker = "const GROUPS_DATA = "
+    end_marker   = ";"
+    i = html.index(start_marker)
+    # find the closing ; after the opening [
+    bracket_start = html.index("[", i)
+    depth = 0
+    pos = bracket_start
+    while pos < len(html):
+        if html[pos] == "[": depth += 1
+        elif html[pos] == "]": depth -= 1
+        if depth == 0:
+            break
+        pos += 1
+    j = pos + 1  # character after closing ]
+    html = html[:i] + start_marker + data_str + html[j:]
+
     with open("index.html", "w") as f:
         f.write(html)
     print(f"index.html updated — {updated}")
