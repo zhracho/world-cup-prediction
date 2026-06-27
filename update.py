@@ -139,7 +139,7 @@ def make_analyses(groups, mc):
                 f"Win {pct}% · Final {mc['final_pcts'].get(name,0)}% · Semi {mc['semi_pcts'].get(name,0)}%")
     return analyses
 
-def inject(groups, mc, analyses):
+def inject(groups, mc, analyses, schedule):
     updated = datetime.now(timezone.utc).strftime("%-d %b %Y, %H:%M UTC")
     with open("index.html") as f: c = f.read()
 
@@ -194,3 +194,134 @@ if __name__=="__main__":
     print("Top 5:", ", ".join(f"{t}({p}%)" for t,p in top5))
     analyses = make_analyses(groups, mc)
     inject(groups, mc, analyses)
+
+# ── SCHEDULE & RESULTS ────────────────────────────────────────────────────────
+
+# ── BRACKET PROPAGATION ───────────────────────────────────────────────────────
+# Maps R32 match winners to their R16 match slot
+# Based on official FIFA bracket tree
+R32_TO_R16 = {
+    # (r32_match_id, r32_match_id) -> r16_match_id
+    (73, 74): 89,   # W73 vs W74 -> M89
+    (75, 76): 90,   # W75 vs W76 -> M90
+    (77, 78): 91,   # W77 vs W78 -> M91
+    (79, 80): 92,   # W79 vs W80 -> M92
+    (81, 82): 93,   # W81 vs W82 -> M93
+    (83, 84): 94,   # W83 vs W84 -> M94
+    (85, 86): 95,   # W85 vs W86 -> M95
+    (87, 88): 96,   # W87 vs W88 -> M96
+}
+R16_TO_QF = {
+    (89, 90): 97,
+    (91, 92): 98,
+    (93, 94): 99,
+    (95, 96): 100,
+}
+QF_TO_SF = {
+    (97, 98): 101,
+    (99, 100): 102,
+}
+SF_TO_FINAL = {
+    (101, 102): 104,
+}
+SF_TO_3RD = {
+    # losers of semis play 3rd place
+    101: 103,
+    102: 103,
+}
+
+def get_winner(match, schedule_map):
+    """Return winning team name from a completed match, or None."""
+    m = schedule_map.get(match['id'])
+    if not m or not m.get('result'):
+        return None
+    r = m['result']
+    if r['home'] > r['away']:
+        return m['home']
+    elif r['away'] > r['home']:
+        return m['away']
+    # Draw — shouldn't happen in knockout but handle gracefully
+    return None
+
+def propagate_bracket(schedule):
+    """Fill in team names for future rounds based on completed results."""
+    smap = {m['id']: m for m in schedule}
+
+    def fill_slot(match_id, home_or_away, team_name):
+        if match_id in smap and smap[match_id][home_or_away] == 'TBD':
+            smap[match_id][home_or_away] = team_name
+            print(f"  Bracket: M{match_id} {home_or_away} → {team_name}")
+
+    # R32 -> R16
+    slots = [
+        (73, 74, 89), (75, 76, 90), (77, 78, 91), (79, 80, 92),
+        (81, 82, 93), (83, 84, 94), (85, 86, 95), (87, 88, 96),
+    ]
+    for m1_id, m2_id, r16_id in slots:
+        w1 = get_winner(smap[m1_id], smap) if m1_id in smap else None
+        w2 = get_winner(smap[m2_id], smap) if m2_id in smap else None
+        if w1: fill_slot(r16_id, 'home', w1)
+        if w2: fill_slot(r16_id, 'away', w2)
+
+    # R16 -> QF
+    slots = [(89,90,97),(91,92,98),(93,94,99),(95,96,100)]
+    for m1_id, m2_id, qf_id in slots:
+        w1 = get_winner(smap[m1_id], smap) if m1_id in smap else None
+        w2 = get_winner(smap[m2_id], smap) if m2_id in smap else None
+        if w1: fill_slot(qf_id, 'home', w1)
+        if w2: fill_slot(qf_id, 'away', w2)
+
+    # QF -> SF
+    slots = [(97,98,101),(99,100,102)]
+    for m1_id, m2_id, sf_id in slots:
+        w1 = get_winner(smap[m1_id], smap) if m1_id in smap else None
+        w2 = get_winner(smap[m2_id], smap) if m2_id in smap else None
+        if w1: fill_slot(sf_id, 'home', w1)
+        if w2: fill_slot(sf_id, 'away', w2)
+
+    # SF -> Final and 3rd place
+    for sf_id, final_slot in [(101,'home'),(102,'away')]:
+        winner = get_winner(smap[sf_id], smap) if sf_id in smap else None
+        if winner: fill_slot(104, final_slot, winner)
+
+    # SF losers -> 3rd place match
+    for sf_id in [101, 102]:
+        m = smap.get(sf_id)
+        if not m or not m.get('result'): continue
+        r = m['result']
+        if r['home'] > r['away']:
+            loser = m['away']
+        elif r['away'] > r['home']:
+            loser = m['home']
+        else:
+            continue
+        existing_103 = smap.get(103, {})
+        if existing_103.get('home') == 'TBD':
+            fill_slot(103, 'home', loser)
+        elif existing_103.get('away') == 'TBD':
+            fill_slot(103, 'away', loser)
+
+    return list(smap.values())
+
+def fetch_results(schedule):
+    """
+    Try to update match results from Wikipedia knockout stage page.
+    Marks completed matches with {home: X, away: Y} result dicts.
+    """
+    try:
+        page = fetch_page("https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_knockout_stage")
+        # Look for score patterns like "2–1", "3–0" etc next to team names
+        # Simple approach: find "X – Y" patterns and map to schedule by match number
+        score_pattern = re.compile(r'Match\s+(\d+).*?(\d+)\s*[–-]\s*(\d+)', re.DOTALL)
+        for m in score_pattern.finditer(page):
+            match_id = int(m.group(1))
+            home_score = int(m.group(2))
+            away_score = int(m.group(3))
+            for s in schedule:
+                if s['id'] == match_id and not s['result']:
+                    s['result'] = {'home': home_score, 'away': away_score}
+                    print(f"  Result found: M{match_id} {home_score}–{away_score}")
+        return schedule
+    except Exception as e:
+        print(f"  Result fetch failed: {e}")
+        return schedule
