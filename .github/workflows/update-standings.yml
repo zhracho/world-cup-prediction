@@ -15,9 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Fetch standings & rebuild index.html
-        env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+      - name: Fetch standings from Wikipedia & rebuild index.html
         run: python3 update.py
 
       - name: Commit updated standings
