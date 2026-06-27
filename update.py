@@ -96,13 +96,13 @@ def inject_into_html(groups):
         content = f.read()
 
     # --- Replace UPDATED timestamp ---
-    # Handles both: const UPDATED = "..."; and <strong id="updatedAt">...</strong>
-    # Try the JS const first
-    ts_marker = 'const UPDATED = "'
-    if ts_marker in content:
-        i = content.index(ts_marker)
-        j = content.index('";', i) + 2
-        content = content[:i] + f'{ts_marker}{updated}";' + content[j:]
+    # Try both spacing variants of the JS const
+    for ts_marker in ['const UPDATED="', 'const UPDATED ="', 'const UPDATED = "']:
+        if ts_marker in content:
+            i = content.index(ts_marker)
+            j = content.index('";', i) + 2
+            content = content[:i] + ts_marker + updated + '";' + content[j:]
+            break
     # Also update the visible HTML span if present
     span_marker = '<strong id="updatedAt">'
     if span_marker in content:
@@ -111,11 +111,15 @@ def inject_into_html(groups):
         content = content[:i] + updated + content[j:]
 
     # --- Replace GROUPS_DATA ---
-    gd_marker = "const GROUPS_DATA = "
-    if gd_marker not in content:
-        raise RuntimeError("const GROUPS_DATA marker not found in index.html — "
-                           "make sure the current index.html is committed to the repo")
-    i  = content.index(gd_marker)
+    # Search loosely (handles "const GROUPS_DATA=" and "const GROUPS_DATA = ")
+    gd_match = None
+    for variant in ["const GROUPS_DATA=", "const GROUPS_DATA ="]:
+        if variant in content:
+            gd_match = variant
+            break
+    if not gd_match:
+        raise RuntimeError("const GROUPS_DATA marker not found in index.html")
+    i  = content.index(gd_match)
     bs = content.index("[", i)
     depth, pos = 0, bs
     while pos < len(content):
@@ -123,7 +127,8 @@ def inject_into_html(groups):
         elif content[pos] == "]": depth -= 1
         if depth == 0: break
         pos += 1
-    content = content[:i] + gd_marker + data_str + content[pos + 1:]
+    # Preserve original spacing style
+    content = content[:i] + gd_match + data_str + content[pos + 1:]
 
     with open("index.html", "w") as f:
         f.write(content)
